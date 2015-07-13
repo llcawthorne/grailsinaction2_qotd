@@ -6,9 +6,22 @@
     </option>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07bc41a7-80da-480f-97db-3584e9ced5c1" name="Default" comment="">
-      <change type="DELETED" beforePath="E:\Dropbox\Code\IdeaProjects\Grails\qotd\.gitattributes" afterPath="" />
-      <change type="DELETED" beforePath="E:\Dropbox\Code\IdeaProjects\Grails\qotd\.gitignore" afterPath="" />
+    <list default="true" id="07bc41a7-80da-480f-97db-3584e9ced5c1" name="Default" comment="got it working after that last fubar, and made it load some sample data in Bootstrap">
+      <change type="DELETED" beforePath="E:\Dropbox\Code\IdeaProjects\Grails\qotd\target\test-classes\integration\application.properties" afterPath="" />
+      <change type="DELETED" beforePath="E:\Dropbox\Code\IdeaProjects\Grails\qotd\target\test-classes\spring\resources.groovy" afterPath="" />
+      <change type="DELETED" beforePath="E:\Dropbox\Code\IdeaProjects\Grails\qotd\target\test-reports\TEST-unit-unit-qotd.QuoteServiceSpec.xml" afterPath="" />
+      <change type="DELETED" beforePath="E:\Dropbox\Code\IdeaProjects\Grails\qotd\target\test-reports\html\all.html" afterPath="" />
+      <change type="DELETED" beforePath="E:\Dropbox\Code\IdeaProjects\Grails\qotd\target\test-reports\html\failed.html" afterPath="" />
+      <change type="DELETED" beforePath="E:\Dropbox\Code\IdeaProjects\Grails\qotd\target\test-reports\html\index.html" afterPath="" />
+      <change type="DELETED" beforePath="E:\Dropbox\Code\IdeaProjects\Grails\qotd\target\test-reports\html\qotd\0_QuoteServiceSpec.html" afterPath="" />
+      <change type="DELETED" beforePath="E:\Dropbox\Code\IdeaProjects\Grails\qotd\target\test-reports\html\stylesheet.css" afterPath="" />
+      <change type="DELETED" beforePath="E:\Dropbox\Code\IdeaProjects\Grails\qotd\target\test-reports\plain\TEST-unit-unit-qotd.QuoteServiceSpec-err.txt" afterPath="" />
+      <change type="DELETED" beforePath="E:\Dropbox\Code\IdeaProjects\Grails\qotd\target\test-reports\plain\TEST-unit-unit-qotd.QuoteServiceSpec-out.txt" afterPath="" />
+      <change type="DELETED" beforePath="E:\Dropbox\Code\IdeaProjects\Grails\qotd\target\test-reports\plain\TEST-unit-unit-qotd.QuoteServiceSpec.txt" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/work/plugins/tomcat-7.0.53/grails-plugin-tomcat-7.0.53.jar" afterPath="$PROJECT_DIR$/target/work/plugins/tomcat-7.0.53/grails-plugin-tomcat-7.0.53.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-reports/TESTS-TestSuites.xml" afterPath="$PROJECT_DIR$/target/test-reports/TESTS-TestSuites.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="qotd.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,7 +58,18 @@
     <favorites_list name="qotd" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="BootStrap.groovy" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/grails-app/conf/BootStrap.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.6177326">
+              <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -67,6 +91,7 @@
         <option value="$PROJECT_DIR$/grails-app/controllers/qotd/QuoteController.groovy" />
         <option value="$PROJECT_DIR$/grails-app/views/quote/random.gsp" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" />
       </list>
     </option>
   </component>
@@ -224,24 +249,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="target" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test-reports" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="qotd" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="qotd" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="grails-app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -279,6 +286,10 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="services" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="qotd" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -796,12 +807,19 @@
       <updated>1436664034420</updated>
       <workItem from="1436664036226" duration="3369000" />
       <workItem from="1436717944833" duration="3986000" />
-      <workItem from="1436722599019" duration="4956000" />
+      <workItem from="1436722599019" duration="6843000" />
     </task>
+    <task id="LOCAL-00001" summary="added gitignore from integrate-with">
+      <created>1436751912666</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1436751912666</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12311000" />
+    <option name="totallyTimeSpent" value="14198000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
@@ -809,7 +827,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="FindBugs-IDEA" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3289597" sideWeight="0.5023256" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3289597" sideWeight="0.5023256" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -819,7 +837,7 @@
       <window_info id="Tail" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Dilbert" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18496802" sideWeight="0.49616858" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3289597" sideWeight="0.4976744" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3289597" sideWeight="0.4976744" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -861,6 +879,10 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="added gitignore from integrate-with" />
+    <option name="LAST_COMMIT_MESSAGE" value="added gitignore from integrate-with" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <option name="time" value="1" />
@@ -872,10 +894,10 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/grails-app/conf/BootStrap.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.67877907">
-          <caret line="73" column="11" selection-start-line="73" selection-start-column="11" selection-end-line="73" selection-end-column="11" />
+        <state vertical-scroll-proportion="0.6177326">
+          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
           <folding />
         </state>
       </provider>

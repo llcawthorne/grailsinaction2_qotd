@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="0" failures="0" hostname="RAVENROOST" id="0" name="QuoteServiceSpec" package="qotd" tests="1" time="0.233" timestamp="2015-07-12T18:14:46">
+  <testsuite errors="0" failures="0" hostname="RAVENROOST" id="0" name="QuoteServiceSpec" package="qotd" tests="1" time="0.329" timestamp="2015-07-13T01:47:23">
       <properties />
 
-      <testcase classname="qotd.QuoteServiceSpec" name="static quote service always returns quiche quote" time="0.225" />
+      <testcase classname="qotd.QuoteServiceSpec" name="static quote service always returns quiche quote" time="0.318" />
 
       <system-out><![CDATA[--Output from static quote service always returns quiche quote--
 ]]></system-out>
