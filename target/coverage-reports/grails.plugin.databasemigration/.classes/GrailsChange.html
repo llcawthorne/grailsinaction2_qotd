@@ -1,0 +1,366 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GrailsChange</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">grails.plugin.databasemigration</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GrailsChange (grails.plugin.databasemigration)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GrailsChange</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 46)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* Copyright 2010-2013 SpringSource.
+<i>2</i>&nbsp; *
+<i>3</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;)
+<i>4</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>5</i>&nbsp; * You may obtain a copy of the License at
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>10</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>11</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>12</i>&nbsp; * See the License for the specific language governing permissions and
+<i>13</i>&nbsp; * limitations under the License.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;package grails.plugin.databasemigration
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import groovy.sql.Sql
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.sql.Connection
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import liquibase.change.AbstractChange
+<i>22</i>&nbsp;import liquibase.change.ChangeMetaData
+<i>23</i>&nbsp;import liquibase.change.ChangeProperty
+<i>24</i>&nbsp;import liquibase.change.CheckSum
+<i>25</i>&nbsp;import liquibase.database.Database
+<i>26</i>&nbsp;import liquibase.database.DatabaseConnection
+<i>27</i>&nbsp;import liquibase.exception.SetupException
+<i>28</i>&nbsp;import liquibase.exception.ValidationErrors
+<i>29</i>&nbsp;import liquibase.exception.Warnings
+<i>30</i>&nbsp;import liquibase.executor.ExecutorService
+<i>31</i>&nbsp;import liquibase.executor.LoggingExecutor
+<i>32</i>&nbsp;import liquibase.statement.SqlStatement
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;import org.codehaus.groovy.grails.commons.GrailsApplication
+<i>35</i>&nbsp;import org.springframework.context.ApplicationContext
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;/**
+<i>38</i>&nbsp; * Custom Groovy-based change.
+<i>39</i>&nbsp; *
+<i>40</i>&nbsp; * @author &lt;a href=&#39;mailto:burt@burtbeckwith.com&#39;&gt;Burt Beckwith&lt;/a&gt;
+<i>41</i>&nbsp; */
+<i>42</i>&nbsp;class GrailsChange extends AbstractChange {
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<i>45</i>&nbsp;	protected boolean validateClosureCalled
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<b class="nc"><i>48</i>&nbsp;	protected ValidationErrors validationErrors = new ValidationErrors()</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<b class="nc"><i>51</i>&nbsp;	protected Warnings warnings = new Warnings()</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<b class="nc"><i>54</i>&nbsp;	protected List&lt;SqlStatement&gt; allStatements = []</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<i>57</i>&nbsp;	protected boolean shouldRun = true
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<i>60</i>&nbsp;	Database database
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<i>63</i>&nbsp;	Sql sql
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<i>66</i>&nbsp;	ApplicationContext ctx
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<i>69</i>&nbsp;	Closure initClosure
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<i>72</i>&nbsp;	Closure validateClosure
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<i>75</i>&nbsp;	Closure changeClosure
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<i>78</i>&nbsp;	Closure rollbackClosure
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;	/**
+<i>81</i>&nbsp;	 * @see liquibase.change.Change#getConfirmationMessage()
+<i>82</i>&nbsp;	 */
+<i>83</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<i>84</i>&nbsp;	String confirmationMessage = &#39;Executed GrailsChange&#39;
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;	@ChangeProperty(includeInSerialization=false)
+<i>87</i>&nbsp;	String checksumString
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;	/**
+<i>90</i>&nbsp;	 * Constructor.
+<i>91</i>&nbsp;	 */
+<i>92</i>&nbsp;	GrailsChange() {
+<b class="nc"><i>93</i>&nbsp;		super(&#39;grailsChange&#39;, &#39;Grails Change&#39;, ChangeMetaData.PRIORITY_DEFAULT)</b>
+<i>94</i>&nbsp;	}
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;	@Override
+<i>97</i>&nbsp;	void init() throws SetupException {
+<b class="nc"><i>98</i>&nbsp;		if (!initClosure) {</b>
+<i>99</i>&nbsp;			return
+<i>100</i>&nbsp;		}
+<i>101</i>&nbsp;
+<b class="nc"><i>102</i>&nbsp;		initClosure.delegate = this</b>
+<i>103</i>&nbsp;		try {
+<b class="nc"><i>104</i>&nbsp;			initClosure()</b>
+<i>105</i>&nbsp;		}
+<i>106</i>&nbsp;		catch (e) {
+<b class="nc"><i>107</i>&nbsp;			throw new SetupException(e)</b>
+<i>108</i>&nbsp;		}
+<i>109</i>&nbsp;	}
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;	@Override
+<i>112</i>&nbsp;	Warnings warn(Database database) {
+<b class="nc"><i>113</i>&nbsp;		initDatabase database</b>
+<b class="nc"><i>114</i>&nbsp;		if (shouldRun) {</b>
+<b class="nc"><i>115</i>&nbsp;			callValidateClosure()</b>
+<i>116</i>&nbsp;		}
+<i>117</i>&nbsp;
+<b class="nc"><i>118</i>&nbsp;		warnings</b>
+<i>119</i>&nbsp;	}
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;	@Override
+<i>122</i>&nbsp;	ValidationErrors validate(Database database) {
+<b class="nc"><i>123</i>&nbsp;		initDatabase database</b>
+<b class="nc"><i>124</i>&nbsp;		if (shouldRun) {</b>
+<b class="nc"><i>125</i>&nbsp;			callValidateClosure()</b>
+<i>126</i>&nbsp;		}
+<i>127</i>&nbsp;
+<b class="nc"><i>128</i>&nbsp;		validationErrors</b>
+<i>129</i>&nbsp;	}
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;	/**
+<i>132</i>&nbsp;	 * Called by the validate closure. Adds a validation error.
+<i>133</i>&nbsp;	 *
+<i>134</i>&nbsp;	 * @param message the error message
+<i>135</i>&nbsp;	 */
+<i>136</i>&nbsp;	void error(String message) {
+<b class="nc"><i>137</i>&nbsp;		validationErrors.addError message</b>
+<i>138</i>&nbsp;	}
+<i>139</i>&nbsp;
+<i>140</i>&nbsp;	/**
+<i>141</i>&nbsp;	 * Called by the validate closure. Adds a warning message.
+<i>142</i>&nbsp;	 *
+<i>143</i>&nbsp;	 * @param warning the warning message
+<i>144</i>&nbsp;	 */
+<i>145</i>&nbsp;	void warn(String warning) {
+<b class="nc"><i>146</i>&nbsp;		warnings.addWarning warning</b>
+<i>147</i>&nbsp;	}
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;	/**
+<i>150</i>&nbsp;	 * {@inheritDoc}
+<i>151</i>&nbsp;	 * @see liquibase.change.Change#generateStatements(liquibase.database.Database)
+<i>152</i>&nbsp;	 */
+<i>153</i>&nbsp;	@Override
+<i>154</i>&nbsp;	SqlStatement[] generateStatements(Database database) {
+<b class="nc"><i>155</i>&nbsp;		initDatabase database</b>
+<i>156</i>&nbsp;
+<b class="nc"><i>157</i>&nbsp;		if (shouldRun &amp;&amp; changeClosure) {</b>
+<b class="nc"><i>158</i>&nbsp;			changeClosure.delegate = this</b>
+<b class="nc"><i>159</i>&nbsp;			changeClosure()</b>
+<i>160</i>&nbsp;		}
+<i>161</i>&nbsp;
+<b class="nc"><i>162</i>&nbsp;		allStatements as SqlStatement[]</b>
+<i>163</i>&nbsp;	}
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;	/**
+<i>166</i>&nbsp;	 * {@inheritDoc}
+<i>167</i>&nbsp;	 * @see liquibase.change.AbstractChange#generateRollbackStatements(liquibase.database.Database)
+<i>168</i>&nbsp;	 */
+<i>169</i>&nbsp;	@Override
+<i>170</i>&nbsp;	SqlStatement[] generateRollbackStatements(Database database) {
+<b class="nc"><i>171</i>&nbsp;		initDatabase database</b>
+<i>172</i>&nbsp;
+<b class="nc"><i>173</i>&nbsp;		if (shouldRun &amp;&amp; rollbackClosure) {</b>
+<b class="nc"><i>174</i>&nbsp;			rollbackClosure.delegate = this</b>
+<b class="nc"><i>175</i>&nbsp;			rollbackClosure()</b>
+<i>176</i>&nbsp;		}
+<i>177</i>&nbsp;
+<b class="nc"><i>178</i>&nbsp;		allStatements as SqlStatement[]</b>
+<i>179</i>&nbsp;	}
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;	/**
+<i>182</i>&nbsp;	 * Called by the change or rollback closure. Adds a statement to be executed.
+<i>183</i>&nbsp;	 *
+<i>184</i>&nbsp;	 * @param statement the statement
+<i>185</i>&nbsp;	 */
+<i>186</i>&nbsp;	void sqlStatement(SqlStatement statement) {
+<b class="nc"><i>187</i>&nbsp;		if (shouldRun &amp;&amp; statement) allStatements &lt;&lt; statement</b>
+<i>188</i>&nbsp;	}
+<i>189</i>&nbsp;
+<i>190</i>&nbsp;	/**
+<i>191</i>&nbsp;	 * Called by the change or rollback closure. Adds multiple statements to be executed.
+<i>192</i>&nbsp;	 *
+<i>193</i>&nbsp;	 * @param statement the statement
+<i>194</i>&nbsp;	 */
+<i>195</i>&nbsp;	void sqlStatements(statements) {
+<b class="nc"><i>196</i>&nbsp;		if (shouldRun &amp;&amp; statements) allStatements.addAll (statements as List)</b>
+<i>197</i>&nbsp;	}
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;	/**
+<i>200</i>&nbsp;	 * Called by the change or rollback closure. Overrides the confirmation message.
+<i>201</i>&nbsp;	 *
+<i>202</i>&nbsp;	 * @param message the confirmation message
+<i>203</i>&nbsp;	 */
+<b class="nc"><i>204</i>&nbsp;	void confirm(String message) { confirmationMessage = message }</b>
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;	/**
+<i>207</i>&nbsp;	 * {@inheritDoc}
+<i>208</i>&nbsp;	 * @see liquibase.change.AbstractChange#supportsRollback(liquibase.database.Database)
+<i>209</i>&nbsp;	 */
+<i>210</i>&nbsp;	@Override
+<b class="nc"><i>211</i>&nbsp;	boolean supportsRollback(Database database) { shouldRun }</b>
+<i>212</i>&nbsp;
+<i>213</i>&nbsp;	/**
+<i>214</i>&nbsp;	 * {@inheritDoc}
+<i>215</i>&nbsp;	 * @see liquibase.change.AbstractChange#generateCheckSum()
+<i>216</i>&nbsp;	 */
+<i>217</i>&nbsp;	@Override
+<i>218</i>&nbsp;	CheckSum generateCheckSum() {
+<i>219</i>&nbsp;//		if (checksumString) {
+<i>220</i>&nbsp;//			return CheckSum.compute(checksumString)
+<i>221</i>&nbsp;//		}
+<i>222</i>&nbsp;//		CheckSum.compute new GroovyAwareStringChangeLogSerializer().serialize(this)
+<i>223</i>&nbsp;
+<b class="nc"><i>224</i>&nbsp;		CheckSum.compute checksumString ?: &#39;Grails Change&#39;</b>
+<i>225</i>&nbsp;	}
+<i>226</i>&nbsp;
+<i>227</i>&nbsp;	/**
+<i>228</i>&nbsp;	 * Called from the change or rollback closure. Creates a &lt;code&gt;Sql&lt;/code&gt; instance from the current connection.
+<i>229</i>&nbsp;	 *
+<i>230</i>&nbsp;	 * @return the sql instance
+<i>231</i>&nbsp;	 */
+<i>232</i>&nbsp;	Sql getSql() {
+<b class="nc"><i>233</i>&nbsp;		if (!connection) return null</b>
+<i>234</i>&nbsp;
+<b class="nc"><i>235</i>&nbsp;		if (!sql) {</b>
+<b class="nc"><i>236</i>&nbsp;			sql = new Sql(connection) {</b>
+<i>237</i>&nbsp;				protected void closeResources(Connection c) {
+<i>238</i>&nbsp;					// do nothing, let Liquibase close the connection
+<i>239</i>&nbsp;				}
+<i>240</i>&nbsp;			}
+<i>241</i>&nbsp;		}
+<i>242</i>&nbsp;
+<b class="nc"><i>243</i>&nbsp;		sql</b>
+<i>244</i>&nbsp;	}
+<i>245</i>&nbsp;
+<i>246</i>&nbsp;	/**
+<i>247</i>&nbsp;	 * Called from the change or rollback closure. Shortcut to get the (wrapper) database connection.
+<i>248</i>&nbsp;	 *
+<i>249</i>&nbsp;	 * @return the connection or &lt;code&gt;null&lt;/code&gt; if the database isn&#39;t set yet
+<i>250</i>&nbsp;	 */
+<b class="nc"><i>251</i>&nbsp;	DatabaseConnection getDatabaseConnection() { database?.connection }</b>
+<i>252</i>&nbsp;
+<i>253</i>&nbsp;	/**
+<i>254</i>&nbsp;	 * Called from the change or rollback closure. Shortcut to get the real database connection.
+<i>255</i>&nbsp;	 *
+<i>256</i>&nbsp;	 * @return the connection or &lt;code&gt;null&lt;/code&gt; if the database isn&#39;t set yet
+<i>257</i>&nbsp;	 */
+<b class="nc"><i>258</i>&nbsp;	Connection getConnection() { database?.connection?.wrappedConnection }</b>
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;	/**
+<i>261</i>&nbsp;	 * Called from the change or rollback closure. Shortcut for the current application.
+<i>262</i>&nbsp;	 *
+<i>263</i>&nbsp;	 * @return the application
+<i>264</i>&nbsp;	 */
+<b class="nc"><i>265</i>&nbsp;	GrailsApplication getApplication() { ctx.grailsApplication }</b>
+<i>266</i>&nbsp;
+<i>267</i>&nbsp;	// warn is called then validate, but both are handled by
+<i>268</i>&nbsp;	// the &#39;warnings&#39; closure, so we only want to run it once
+<i>269</i>&nbsp;	protected void callValidateClosure() {
+<b class="nc"><i>270</i>&nbsp;		if (!shouldRun || !validateClosure || validateClosureCalled) {</b>
+<i>271</i>&nbsp;			return
+<i>272</i>&nbsp;		}
+<i>273</i>&nbsp;
+<b class="nc"><i>274</i>&nbsp;		validateClosure.delegate = this</b>
+<b class="nc"><i>275</i>&nbsp;		validateClosure()</b>
+<b class="nc"><i>276</i>&nbsp;		validationErrors</b>
+<i>277</i>&nbsp;	}
+<i>278</i>&nbsp;
+<i>279</i>&nbsp;	protected void initDatabase(Database database) {
+<b class="nc"><i>280</i>&nbsp;		this.database = database</b>
+<b class="nc"><i>281</i>&nbsp;		shouldRun = !(ExecutorService.getInstance().getExecutor(database) instanceof LoggingExecutor)</b>
+<i>282</i>&nbsp;	}
+<i>283</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

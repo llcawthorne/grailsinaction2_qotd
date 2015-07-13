@@ -1,0 +1,152 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CacheTransformation</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">grails.plugin.cache.compiler</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CacheTransformation (grails.plugin.cache.compiler)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CacheTransformation</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* Copyright 2012-2013 SpringSource.
+<i>2</i>&nbsp; *
+<i>3</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<i>4</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>5</i>&nbsp; * You may obtain a copy of the License at
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>10</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>11</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>12</i>&nbsp; * See the License for the specific language governing permissions and
+<i>13</i>&nbsp; * limitations under the License.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;package grails.plugin.cache.compiler;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import grails.util.CollectionUtils;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.util.Map;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import org.codehaus.groovy.ast.ASTNode;
+<i>22</i>&nbsp;import org.codehaus.groovy.ast.AnnotatedNode;
+<i>23</i>&nbsp;import org.codehaus.groovy.ast.AnnotationNode;
+<i>24</i>&nbsp;import org.codehaus.groovy.ast.ClassNode;
+<i>25</i>&nbsp;import org.codehaus.groovy.ast.expr.Expression;
+<i>26</i>&nbsp;import org.codehaus.groovy.control.CompilePhase;
+<i>27</i>&nbsp;import org.codehaus.groovy.control.SourceUnit;
+<i>28</i>&nbsp;import org.codehaus.groovy.transform.ASTTransformation;
+<i>29</i>&nbsp;import org.codehaus.groovy.transform.GroovyASTTransformation;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;/**
+<i>32</i>&nbsp; * @author Jeff Brown
+<i>33</i>&nbsp; */
+<i>34</i>&nbsp;@GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION)
+<b class="nc"><i>35</i>&nbsp;public class CacheTransformation implements ASTTransformation {</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;   @SuppressWarnings(&quot;unchecked&quot;)
+<b class="nc"><i>38</i>&nbsp;   protected static final Map&lt;ClassNode, ClassNode&gt; GRAILS_ANNOTATION_CLASS_NODE_TO_SPRING_ANNOTATION_CLASS_NODE = CollectionUtils.&lt;ClassNode, ClassNode&gt;newMap(</b>
+<i>39</i>&nbsp;   		new ClassNode(grails.plugin.cache.Cacheable.class),  new ClassNode(org.springframework.cache.annotation.Cacheable.class),
+<i>40</i>&nbsp;   		new ClassNode(grails.plugin.cache.CachePut.class),   new ClassNode(org.springframework.cache.annotation.CachePut.class),
+<i>41</i>&nbsp;   		new ClassNode(grails.plugin.cache.CacheEvict.class), new ClassNode(org.springframework.cache.annotation.CacheEvict.class));
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;	public void visit(final ASTNode[] astNodes, final SourceUnit sourceUnit) {
+<b class="nc"><i>44</i>&nbsp;		final ASTNode firstNode = astNodes[0];</b>
+<b class="nc"><i>45</i>&nbsp;		final ASTNode secondNode = astNodes[1];</b>
+<b class="nc"><i>46</i>&nbsp;		if (!(firstNode instanceof AnnotationNode) || !(secondNode instanceof AnnotatedNode)) {</b>
+<b class="nc"><i>47</i>&nbsp;			throw new RuntimeException(&quot;Internal error: wrong types: &quot; + firstNode.getClass().getName() +</b>
+<i>48</i>&nbsp;					&quot; / &quot; + secondNode.getClass().getName());
+<i>49</i>&nbsp;		}
+<i>50</i>&nbsp;
+<b class="nc"><i>51</i>&nbsp;		final AnnotationNode grailsCacheAnnotationNode = (AnnotationNode) firstNode;</b>
+<b class="nc"><i>52</i>&nbsp;		final AnnotatedNode annotatedNode = (AnnotatedNode) secondNode;</b>
+<b class="nc"><i>53</i>&nbsp;		final AnnotationNode springCacheAnnotationNode = getCorrespondingSpringAnnotation(</b>
+<i>54</i>&nbsp;				grailsCacheAnnotationNode);
+<b class="nc"><i>55</i>&nbsp;		annotatedNode.addAnnotation(springCacheAnnotationNode);</b>
+<i>56</i>&nbsp;	}
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;	protected AnnotationNode getCorrespondingSpringAnnotation(final AnnotationNode grailsCacheAnnotationNode) {
+<b class="nc"><i>59</i>&nbsp;		final Map&lt;String, Expression&gt; grailsAnnotationMembers = grailsCacheAnnotationNode.getMembers();</b>
+<i>60</i>&nbsp;
+<b class="nc"><i>61</i>&nbsp;		final ClassNode springCacheAnnotationClassNode = GRAILS_ANNOTATION_CLASS_NODE_TO_SPRING_ANNOTATION_CLASS_NODE.get(</b>
+<i>62</i>&nbsp;				grailsCacheAnnotationNode.getClassNode());
+<b class="nc"><i>63</i>&nbsp;		final AnnotationNode springCacheAnnotationNode = new AnnotationNode(springCacheAnnotationClassNode);</b>
+<b class="nc"><i>64</i>&nbsp;		for (Map.Entry&lt;String, Expression&gt; entry : grailsAnnotationMembers.entrySet()) {</b>
+<b class="nc"><i>65</i>&nbsp;			springCacheAnnotationNode.addMember(entry.getKey(), entry.getValue());</b>
+<b class="nc"><i>66</i>&nbsp;		}</b>
+<b class="nc"><i>67</i>&nbsp;		return springCacheAnnotationNode;</b>
+<i>68</i>&nbsp;	}
+<i>69</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

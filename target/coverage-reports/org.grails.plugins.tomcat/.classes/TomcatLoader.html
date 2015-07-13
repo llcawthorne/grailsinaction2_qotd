@@ -1,0 +1,185 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TomcatLoader</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.grails.plugins.tomcat</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TomcatLoader (org.grails.plugins.tomcat)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TomcatLoader</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Copyright 2011 SpringSource
+<i>3</i>&nbsp; *
+<i>4</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<i>5</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>6</i>&nbsp; * You may obtain a copy of the License at
+<i>7</i>&nbsp; *
+<i>8</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>9</i>&nbsp; *
+<i>10</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>11</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>12</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>13</i>&nbsp; * See the License for the specific language governing permissions and
+<i>14</i>&nbsp; * limitations under the License.
+<i>15</i>&nbsp; */
+<i>16</i>&nbsp;package org.grails.plugins.tomcat
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;import java.beans.PropertyChangeListener
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import org.apache.catalina.Container
+<i>21</i>&nbsp;import org.apache.catalina.Lifecycle
+<i>22</i>&nbsp;import org.apache.catalina.LifecycleState
+<i>23</i>&nbsp;import org.apache.catalina.Loader
+<i>24</i>&nbsp;import org.apache.catalina.util.LifecycleBase
+<i>25</i>&nbsp;import org.apache.commons.logging.Log
+<i>26</i>&nbsp;import org.apache.commons.logging.LogFactory
+<i>27</i>&nbsp;import org.apache.naming.resources.DirContextURLStreamHandler
+<i>28</i>&nbsp;import org.apache.naming.resources.DirContextURLStreamHandlerFactory
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;/**
+<i>31</i>&nbsp; * A loader instance used for the embedded version of Tomcat 7.
+<i>32</i>&nbsp; *
+<i>33</i>&nbsp; * @author Graeme Rocher
+<i>34</i>&nbsp; * @since 2.0
+<i>35</i>&nbsp; */
+<i>36</i>&nbsp;class TomcatLoader extends LifecycleBase implements Loader {
+<i>37</i>&nbsp;
+<b class="nc"><i>38</i>&nbsp;    private static Log log = LogFactory.getLog(TomcatLoader.name)</b>
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    private static boolean first = true
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    ClassLoader classLoader
+<i>43</i>&nbsp;    Container container
+<i>44</i>&nbsp;    boolean delegate
+<i>45</i>&nbsp;    boolean reloadable
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    TomcatLoader(ClassLoader classLoader) {
+<i>48</i>&nbsp;        // Class loader that only searches the parent
+<b class="nc"><i>49</i>&nbsp;        this.classLoader = new ParentDelegatingClassLoader(classLoader)</b>
+<i>50</i>&nbsp;    }
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    void addPropertyChangeListener(PropertyChangeListener listener) {}
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    void addRepository(String repository) {
+<b class="nc"><i>55</i>&nbsp;        log.warn &quot;Call to addRepository($repository) was ignored.&quot;</b>
+<i>56</i>&nbsp;    }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    void backgroundProcess() {}
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    String[] findRepositories() {
+<b class="nc"><i>61</i>&nbsp;        log.warn &quot;Call to findRepositories() returned null.&quot;</b>
+<i>62</i>&nbsp;    }
+<i>63</i>&nbsp;
+<b class="nc"><i>64</i>&nbsp;    String getInfo() { &quot;MyLoader/1.0&quot; }</b>
+<i>65</i>&nbsp;
+<b class="nc"><i>66</i>&nbsp;    boolean modified() { false }</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    void removePropertyChangeListener(PropertyChangeListener listener) {}
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    @Override protected void initInternal() {
+<b class="nc"><i>71</i>&nbsp;        URLStreamHandlerFactory streamHandlerFactory = new DirContextURLStreamHandlerFactory()</b>
+<i>72</i>&nbsp;
+<b class="nc"><i>73</i>&nbsp;        if (first) {</b>
+<b class="nc"><i>74</i>&nbsp;            first = false</b>
+<i>75</i>&nbsp;            try {
+<b class="nc"><i>76</i>&nbsp;                URL.setURLStreamHandlerFactory(streamHandlerFactory)</b>
+<i>77</i>&nbsp;            } catch (Exception e) {
+<i>78</i>&nbsp;                // Log and continue anyway, this is not critical
+<b class="nc"><i>79</i>&nbsp;                log.error(&quot;Error registering jndi stream handler&quot;, e)</b>
+<i>80</i>&nbsp;            } catch (Throwable t) {
+<i>81</i>&nbsp;                // This is likely a dual registration
+<b class="nc"><i>82</i>&nbsp;                log.info(&quot;Dual registration of jndi stream handler: &quot; + t.getMessage())</b>
+<i>83</i>&nbsp;            }
+<i>84</i>&nbsp;        }
+<i>85</i>&nbsp;
+<b class="nc"><i>86</i>&nbsp;        DirContextURLStreamHandler.bind(classLoader, container.getResources())</b>
+<i>87</i>&nbsp;    }
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    @Override protected void destroyInternal() {
+<b class="nc"><i>90</i>&nbsp;        classLoader = null</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    @Override protected void startInternal() {
+<b class="nc"><i>94</i>&nbsp;        fireLifecycleEvent(Lifecycle.START_EVENT, this)</b>
+<b class="nc"><i>95</i>&nbsp;        setState(LifecycleState.STARTING)</b>
+<i>96</i>&nbsp;    }
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    @Override protected void stopInternal() {
+<b class="nc"><i>99</i>&nbsp;        fireLifecycleEvent(Lifecycle.STOP_EVENT, this)</b>
+<b class="nc"><i>100</i>&nbsp;        setState(LifecycleState.STOPPING)</b>
+<i>101</i>&nbsp;    }
+<i>102</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

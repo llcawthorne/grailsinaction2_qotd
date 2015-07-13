@@ -1,0 +1,273 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AggregatedResourceMeta</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.grails.plugin.resource</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AggregatedResourceMeta (org.grails.plugin.resource)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AggregatedResourceMeta</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 33)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AggregatedResourceMeta$_buildAggregateResource_closure3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AggregatedResourceMeta$_buildAggregateResource_closure3_closure4</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AggregatedResourceMeta$_containsResource_closure1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AggregatedResourceMeta$_isDirty_closure2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 43)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package org.grails.plugin.resource
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import org.apache.commons.logging.LogFactory
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import org.apache.commons.io.FilenameUtils
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;/**
+<i>8</i>&nbsp; * Holder for info about a resource that is made up of other resources
+<i>9</i>&nbsp; *
+<i>10</i>&nbsp; * @author Marc Palmer (marc@grailsrocks.com)
+<i>11</i>&nbsp; * @author Luke Daley (ld@ldaley.com)
+<i>12</i>&nbsp; */
+<i>13</i>&nbsp;class AggregatedResourceMeta extends ResourceMeta {
+<i>14</i>&nbsp;
+<b class="nc"><i>15</i>&nbsp;    def log = LogFactory.getLog(this.class)</b>
+<i>16</i>&nbsp;
+<b class="nc"><i>17</i>&nbsp;    def resources = []</b>
+<b class="nc"><i>18</i>&nbsp;    def inheritedModuleDependencies = new HashSet()</b>
+<i>19</i>&nbsp;    
+<i>20</i>&nbsp;    void reset() {
+<b class="nc"><i>21</i>&nbsp;        super.reset()</b>
+<i>22</i>&nbsp;    }
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    boolean containsResource(ResourceMeta r) {
+<b class="nc"><i>25</i>&nbsp;        resources.find { r.sourceUrl == it.sourceUrl }</b>
+<i>26</i>&nbsp;    }
+<i>27</i>&nbsp;    
+<i>28</i>&nbsp;    @Override
+<i>29</i>&nbsp;    boolean isDirty() {
+<b class="nc"><i>30</i>&nbsp;        resources.any { it.dirty }</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    void add(ResourceMeta r, Closure postProcessor = null) {
+<b class="nc"><i>34</i>&nbsp;        r.delegateTo(this)</b>
+<i>35</i>&nbsp;
+<b class="nc"><i>36</i>&nbsp;        if (!containsResource(r)) {</b>
+<b class="nc"><i>37</i>&nbsp;            resources &lt;&lt; r</b>
+<b class="nc"><i>38</i>&nbsp;            inheritedModuleDependencies &lt;&lt; r.module</b>
+<i>39</i>&nbsp;        
+<i>40</i>&nbsp;            // Update our aggregated sourceUrl
+<b class="nc"><i>41</i>&nbsp;            sourceUrl = &quot;${sourceUrl}, ${r.sourceUrl}&quot;</b>
+<i>42</i>&nbsp;        }
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;        if (postProcessor) {</b>
+<b class="nc"><i>45</i>&nbsp;            postProcessor(this)</b>
+<i>46</i>&nbsp;        }
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    Writer getWriter() {
+<b class="nc"><i>50</i>&nbsp;        processedFile.newWriter(&#39;UTF-8&#39;, true)</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    protected initFile(grailsResourceProcessor) {
+<b class="nc"><i>54</i>&nbsp;        def commaPos = sourceUrl.indexOf(&#39;,&#39;) </b>
+<b class="nc"><i>55</i>&nbsp;        if (commaPos == -1) {</b>
+<b class="nc"><i>56</i>&nbsp;            commaPos = sourceUrl.size()</b>
+<i>57</i>&nbsp;        }
+<b class="nc"><i>58</i>&nbsp;        actualUrl = commaPos ? sourceUrl[0..commaPos-1] : sourceUrl</b>
+<i>59</i>&nbsp;
+<b class="nc"><i>60</i>&nbsp;        processedFile = grailsResourceProcessor.makeFileForURI(actualUrl)</b>
+<b class="nc"><i>61</i>&nbsp;        processedFile.createNewFile()</b>
+<i>62</i>&nbsp;
+<b class="nc"><i>63</i>&nbsp;        this.contentType = grailsResourceProcessor.getMimeType(actualUrl)</b>
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    @Override
+<i>67</i>&nbsp;    void beginPrepare(grailsResourceProcessor) {
+<b class="nc"><i>68</i>&nbsp;        initFile(grailsResourceProcessor)</b>
+<i>69</i>&nbsp;
+<b class="nc"><i>70</i>&nbsp;        this.originalSize = resources.originalSize.sum()</b>
+<i>71</i>&nbsp;        
+<b class="nc"><i>72</i>&nbsp;        buildAggregateResource(grailsResourceProcessor)</b>
+<i>73</i>&nbsp;    }
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    void buildAggregateResource(grailsResourceProcessor) {
+<b class="nc"><i>76</i>&nbsp;        def moduleOrder = grailsResourceProcessor.modulesInDependencyOrder</b>
+<i>77</i>&nbsp;
+<b class="nc"><i>78</i>&nbsp;        def newestLastMod = 0</b>
+<i>79</i>&nbsp;        
+<b class="nc"><i>80</i>&nbsp;        def bundledContent = new StringBuilder()</b>
+<i>81</i>&nbsp;        
+<i>82</i>&nbsp;        // Add the resources to the file in the order determined by module dependencies!
+<b class="nc"><i>83</i>&nbsp;        moduleOrder.each { m -&gt;</b>
+<b class="nc"><i>84</i>&nbsp;            resources.each { r -&gt;</b>
+<b class="nc"><i>85</i>&nbsp;                if (r.module.name == m) {</b>
+<i>86</i>&nbsp;                    // Append to the existing file
+<b class="nc"><i>87</i>&nbsp;                    if (log.debugEnabled) {</b>
+<b class="nc"><i>88</i>&nbsp;                        log.debug &quot;Appending contents of ${r.processedFile} to ${processedFile}&quot;</b>
+<i>89</i>&nbsp;                    }
+<b class="nc"><i>90</i>&nbsp;                    bundledContent &lt;&lt; r.processedFile.getText(&quot;UTF-8&quot;)</b>
+<b class="nc"><i>91</i>&nbsp;                    bundledContent &lt;&lt; &quot;\r\n&quot;</b>
+<i>92</i>&nbsp;                    
+<b class="nc"><i>93</i>&nbsp;                    if (r.originalLastMod &gt; newestLastMod) {</b>
+<b class="nc"><i>94</i>&nbsp;                        newestLastMod = r.originalLastMod</b>
+<i>95</i>&nbsp;                    }
+<i>96</i>&nbsp;                }
+<i>97</i>&nbsp;            }
+<i>98</i>&nbsp;        }
+<i>99</i>&nbsp;        
+<b class="nc"><i>100</i>&nbsp;        def out = getWriter()</b>
+<b class="nc"><i>101</i>&nbsp;        out &lt;&lt; bundledContent</b>
+<b class="nc"><i>102</i>&nbsp;        out &lt;&lt; &quot;\r\n&quot;</b>
+<b class="nc"><i>103</i>&nbsp;        out.close()</b>
+<i>104</i>&nbsp;        
+<b class="nc"><i>105</i>&nbsp;        this.originalLastMod = newestLastMod</b>
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

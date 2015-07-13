@@ -1,0 +1,192 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: LazyParamAwareEvaluationContext</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">grails.plugin.cache.web.filter</a> ]
+</div>
+
+<h1>Coverage Summary for Class: LazyParamAwareEvaluationContext (grails.plugin.cache.web.filter)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LazyParamAwareEvaluationContext</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 30)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* Copyright 2012-2013 SpringSource.
+<i>2</i>&nbsp; *
+<i>3</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<i>4</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>5</i>&nbsp; * You may obtain a copy of the License at
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>10</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>11</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>12</i>&nbsp; * See the License for the specific language governing permissions and
+<i>13</i>&nbsp; * limitations under the License.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;package grails.plugin.cache.web.filter;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import java.lang.reflect.Method;
+<i>18</i>&nbsp;import java.util.Map;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import org.springframework.aop.support.AopUtils;
+<i>21</i>&nbsp;import org.springframework.core.ParameterNameDiscoverer;
+<i>22</i>&nbsp;import org.springframework.expression.spel.support.StandardEvaluationContext;
+<i>23</i>&nbsp;import org.springframework.util.ObjectUtils;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;/**
+<i>26</i>&nbsp; * Evaluation context class that adds a method parameters as SpEL
+<i>27</i>&nbsp; * variables, in a lazy manner. The lazy nature eliminates unneeded
+<i>28</i>&nbsp; * parsing of classes byte code for parameter discovery.
+<i>29</i>&nbsp; *
+<i>30</i>&nbsp; * &lt;p&gt;To limit the creation of objects, an ugly constructor is used
+<i>31</i>&nbsp; * (rather then a dedicated &#39;closure&#39;-like class for deferred execution).
+<i>32</i>&nbsp; *
+<i>33</i>&nbsp; * Based on package-scope org.springframework.cache.interceptor
+<i>34</i>&nbsp; * @author Costin Leau
+<i>35</i>&nbsp; * @author Burt Beckwith
+<i>36</i>&nbsp; */
+<i>37</i>&nbsp;public class LazyParamAwareEvaluationContext extends StandardEvaluationContext {
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;	protected final ParameterNameDiscoverer paramDiscoverer;
+<i>40</i>&nbsp;	protected final Method method;
+<i>41</i>&nbsp;	protected final Object[] args;
+<i>42</i>&nbsp;	protected final Class&lt;?&gt; targetClass;
+<i>43</i>&nbsp;	protected final Map&lt;String, Method&gt; methodCache;
+<b class="nc"><i>44</i>&nbsp;	protected boolean paramLoaded = false;</b>
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;	public LazyParamAwareEvaluationContext(Object rootObject, ParameterNameDiscoverer paramDiscoverer, Method method,
+<i>47</i>&nbsp;			Object[] args, Class&lt;?&gt; targetClass, Map&lt;String, Method&gt; methodCache) {
+<b class="nc"><i>48</i>&nbsp;		super(rootObject);</b>
+<i>49</i>&nbsp;
+<b class="nc"><i>50</i>&nbsp;		this.paramDiscoverer = paramDiscoverer;</b>
+<b class="nc"><i>51</i>&nbsp;		this.method = method;</b>
+<b class="nc"><i>52</i>&nbsp;		this.args = args;</b>
+<b class="nc"><i>53</i>&nbsp;		this.targetClass = targetClass;</b>
+<b class="nc"><i>54</i>&nbsp;		this.methodCache = methodCache;</b>
+<i>55</i>&nbsp;	}
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;	/**
+<i>58</i>&nbsp;	 * Load the param information only when needed.
+<i>59</i>&nbsp;	 */
+<i>60</i>&nbsp;	@Override
+<i>61</i>&nbsp;	public Object lookupVariable(String name) {
+<b class="nc"><i>62</i>&nbsp;		Object variable = super.lookupVariable(name);</b>
+<b class="nc"><i>63</i>&nbsp;		if (variable != null) {</b>
+<b class="nc"><i>64</i>&nbsp;			return variable;</b>
+<i>65</i>&nbsp;		}
+<i>66</i>&nbsp;
+<b class="nc"><i>67</i>&nbsp;		if (!paramLoaded) {</b>
+<b class="nc"><i>68</i>&nbsp;			loadArgsAsVariables();</b>
+<b class="nc"><i>69</i>&nbsp;			paramLoaded = true;</b>
+<b class="nc"><i>70</i>&nbsp;			variable = super.lookupVariable(name);</b>
+<i>71</i>&nbsp;		}
+<i>72</i>&nbsp;
+<b class="nc"><i>73</i>&nbsp;		return variable;</b>
+<i>74</i>&nbsp;	}
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;	protected void loadArgsAsVariables() {
+<i>77</i>&nbsp;		// shortcut if no args need to be loaded
+<b class="nc"><i>78</i>&nbsp;		if (ObjectUtils.isEmpty(args)) {</b>
+<i>79</i>&nbsp;			return;
+<i>80</i>&nbsp;		}
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;		String key = toString(method);</b>
+<b class="nc"><i>83</i>&nbsp;		Method targetMethod = methodCache.get(key);</b>
+<b class="nc"><i>84</i>&nbsp;		if (targetMethod == null) {</b>
+<b class="nc"><i>85</i>&nbsp;			targetMethod = AopUtils.getMostSpecificMethod(method, targetClass);</b>
+<b class="nc"><i>86</i>&nbsp;			if (targetMethod == null) {</b>
+<b class="nc"><i>87</i>&nbsp;				targetMethod = method;</b>
+<i>88</i>&nbsp;			}
+<b class="nc"><i>89</i>&nbsp;			methodCache.put(key, targetMethod);</b>
+<i>90</i>&nbsp;		}
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;		// save arguments as indexed variables
+<b class="nc"><i>93</i>&nbsp;		for (int i = 0; i &lt; args.length; i++) {</b>
+<b class="nc"><i>94</i>&nbsp;			setVariable(&quot;p&quot; + i, args[i]);</b>
+<i>95</i>&nbsp;		}
+<i>96</i>&nbsp;
+<b class="nc"><i>97</i>&nbsp;		String[] parameterNames = paramDiscoverer.getParameterNames(targetMethod);</b>
+<i>98</i>&nbsp;		// save parameter names (if discovered)
+<b class="nc"><i>99</i>&nbsp;		if (parameterNames != null) {</b>
+<b class="nc"><i>100</i>&nbsp;			for (int i = 0; i &lt; parameterNames.length; i++) {</b>
+<b class="nc"><i>101</i>&nbsp;				setVariable(parameterNames[i], args[i]);</b>
+<i>102</i>&nbsp;			}
+<i>103</i>&nbsp;		}
+<i>104</i>&nbsp;	}
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;	protected String toString(Method m) {
+<b class="nc"><i>107</i>&nbsp;		return m.getDeclaringClass().getName() + &#39;#&#39; + m;</b>
+<i>108</i>&nbsp;	}
+<i>109</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

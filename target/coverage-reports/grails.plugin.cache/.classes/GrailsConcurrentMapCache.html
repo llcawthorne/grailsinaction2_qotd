@@ -1,0 +1,138 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GrailsConcurrentMapCache</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">grails.plugin.cache</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GrailsConcurrentMapCache (grails.plugin.cache)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GrailsConcurrentMapCache</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* Copyright 2012-2013 SpringSource.
+<i>2</i>&nbsp; *
+<i>3</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<i>4</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>5</i>&nbsp; * You may obtain a copy of the License at
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>10</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>11</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>12</i>&nbsp; * See the License for the specific language governing permissions and
+<i>13</i>&nbsp; * limitations under the License.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;package grails.plugin.cache;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import java.util.Collection;
+<i>18</i>&nbsp;import java.util.concurrent.ConcurrentMap;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import org.springframework.cache.concurrent.ConcurrentMapCache;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * Extends the default implementation to return GrailsValueWrapper instances instead of
+<i>24</i>&nbsp; * SimpleValueWrapper. This isn&#39;t useful for this implementation but is for others where
+<i>25</i>&nbsp; * the native wrapper has more useful information that would otherwise be lost (for example
+<i>26</i>&nbsp; * the TTL in the Ehcache Element class). This implementation exists so that all caches
+<i>27</i>&nbsp; * consistently return a GrailsValueWrapper.
+<i>28</i>&nbsp; *
+<i>29</i>&nbsp; * @author Burt Beckwith
+<i>30</i>&nbsp; */
+<i>31</i>&nbsp;public class GrailsConcurrentMapCache extends ConcurrentMapCache implements GrailsCache {
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;	public GrailsConcurrentMapCache(String name) {
+<b class="nc"><i>34</i>&nbsp;		super(name);</b>
+<i>35</i>&nbsp;	}
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;	public GrailsConcurrentMapCache(String name, boolean allowNullValues) {
+<b class="nc"><i>38</i>&nbsp;		super(name, allowNullValues);</b>
+<i>39</i>&nbsp;	}
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;	public GrailsConcurrentMapCache(String name, ConcurrentMap&lt;Object, Object&gt; store, boolean allowNullValues) {
+<b class="nc"><i>42</i>&nbsp;		super(name, store, allowNullValues);</b>
+<i>43</i>&nbsp;	}
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;	@Override
+<i>46</i>&nbsp;	public GrailsValueWrapper get(Object key) {
+<b class="nc"><i>47</i>&nbsp;		Object value = getNativeCache().get(key);</b>
+<b class="nc"><i>48</i>&nbsp;		return value == null ? null : new GrailsValueWrapper(fromStoreValue(value), null);</b>
+<i>49</i>&nbsp;	}
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;	@SuppressWarnings(&quot;unchecked&quot;)
+<i>52</i>&nbsp;	public Collection&lt;Object&gt; getAllKeys() {
+<b class="nc"><i>53</i>&nbsp;		return getNativeCache().keySet();</b>
+<i>54</i>&nbsp;	}
+<i>55</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

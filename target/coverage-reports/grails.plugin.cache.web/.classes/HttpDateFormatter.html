@@ -1,0 +1,183 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: HttpDateFormatter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">grails.plugin.cache.web</a> ]
+</div>
+
+<h1>Coverage Summary for Class: HttpDateFormatter (grails.plugin.cache.web)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HttpDateFormatter</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* Copyright 2012-2013 SpringSource.
+<i>2</i>&nbsp; *
+<i>3</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<i>4</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>5</i>&nbsp; * You may obtain a copy of the License at
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>10</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>11</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>12</i>&nbsp; * See the License for the specific language governing permissions and
+<i>13</i>&nbsp; * limitations under the License.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;package grails.plugin.cache.web;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import java.io.Serializable;
+<i>18</i>&nbsp;import java.text.ParseException;
+<i>19</i>&nbsp;import java.text.SimpleDateFormat;
+<i>20</i>&nbsp;import java.util.Date;
+<i>21</i>&nbsp;import java.util.Locale;
+<i>22</i>&nbsp;import java.util.TimeZone;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;import org.slf4j.LoggerFactory;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;/**
+<i>27</i>&nbsp; * RFC 2616 - HTTP/1.1 Protocol
+<i>28</i>&nbsp; * &lt;p/&gt;
+<i>29</i>&nbsp; * Section 3.3.1 defines the preferred full date and time as:
+<i>30</i>&nbsp; *
+<i>31</i>&nbsp; * &lt;pre&gt;
+<i>32</i>&nbsp; * HTTP-date    = rfc1123-date
+<i>33</i>&nbsp; * rfc1123-date = wkday &quot;,&quot; SP date1 SP time SP &quot;GMT&quot;
+<i>34</i>&nbsp; * date1        = 2DIGIT SP month SP 4DIGIT
+<i>35</i>&nbsp; * ; day month year (e.g., 02 Jun 1982)
+<i>36</i>&nbsp; * time         = 2DIGIT &quot;:&quot; 2DIGIT &quot;:&quot; 2DIGIT
+<i>37</i>&nbsp; * ; 00:00:00 - 23:59:59
+<i>38</i>&nbsp; * wkday        = &quot;Mon&quot; | &quot;Tue&quot; | &quot;Wed&quot;
+<i>39</i>&nbsp; * | &quot;Thu&quot; | &quot;Fri&quot; | &quot;Sat&quot; | &quot;Sun&quot;
+<i>40</i>&nbsp; * month        = &quot;Jan&quot; | &quot;Feb&quot; | &quot;Mar&quot; | &quot;Apr&quot;
+<i>41</i>&nbsp; * | &quot;May&quot; | &quot;Jun&quot; | &quot;Jul&quot; | &quot;Aug&quot;
+<i>42</i>&nbsp; * | &quot;Sep&quot; | &quot;Oct&quot; | &quot;Nov&quot; | &quot;Dec&quot;
+<i>43</i>&nbsp; * &lt;/pre&gt;
+<i>44</i>&nbsp; * &lt;p/&gt;
+<i>45</i>&nbsp; * An example is &lt;code&gt;Sun, 06 Nov 1994 08:49:37 GMT&lt;/code&gt;
+<i>46</i>&nbsp; * &lt;p/&gt;
+<i>47</i>&nbsp; * These are used in request and response headers.
+<i>48</i>&nbsp; * &lt;p/&gt;
+<i>49</i>&nbsp; *
+<i>50</i>&nbsp; * Based on net.sf.ehcache.constructs.web.HttpDateFormatter.
+<i>51</i>&nbsp; *
+<i>52</i>&nbsp; * @author Greg Luck
+<i>53</i>&nbsp; * @author Burt Beckwith
+<i>54</i>&nbsp; */
+<i>55</i>&nbsp;public class HttpDateFormatter implements Serializable {
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;	private static final long serialVersionUID = 1;
+<i>58</i>&nbsp;
+<b class="nc"><i>59</i>&nbsp;	protected final SimpleDateFormat httpDateFormat = new SimpleDateFormat(</b>
+<i>60</i>&nbsp;			&quot;EEE, dd MMM yyyy HH:mm:ss z&quot;, Locale.US);
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;	/**
+<i>63</i>&nbsp;	 * Constructs a new formatter.
+<i>64</i>&nbsp;	 * &lt;p/&gt;
+<i>65</i>&nbsp;	 * Note that this class is not thread-safe for use by multiple threads, as
+<i>66</i>&nbsp;	 * SimpleDateFormat is not. Each thread should create their own instance of
+<i>67</i>&nbsp;	 * this class.
+<i>68</i>&nbsp;	 */
+<b class="nc"><i>69</i>&nbsp;	public HttpDateFormatter() {</b>
+<b class="nc"><i>70</i>&nbsp;		httpDateFormat.setTimeZone(TimeZone.getTimeZone(&quot;GMT&quot;));</b>
+<i>71</i>&nbsp;	}
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;	/**
+<i>74</i>&nbsp;	 * @param date
+<i>75</i>&nbsp;	 * @return A date formatted in accordance with Section 3.3.1 of RFC 2616
+<i>76</i>&nbsp;	 */
+<i>77</i>&nbsp;	public synchronized String formatHttpDate(Date date) {
+<b class="nc"><i>78</i>&nbsp;		return httpDateFormat.format(date);</b>
+<i>79</i>&nbsp;	}
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;	/**
+<i>82</i>&nbsp;	 * Parses dates supplied in accordance with Section 3.3.1 of RFC 2616
+<i>83</i>&nbsp;	 *
+<i>84</i>&nbsp;	 * @param date
+<i>85</i>&nbsp;	 *           a date formatted in accordance with Section 3.3.1 of RFC 2616
+<i>86</i>&nbsp;	 * @return the parsed Date. If the date cannot be parsed, the start of POSIX
+<i>87</i>&nbsp;	 *         time, 1/1/1970 is returned, which will have the effect of expiring
+<i>88</i>&nbsp;	 *         the content.
+<i>89</i>&nbsp;	 */
+<i>90</i>&nbsp;	public synchronized Date parseDateFromHttpDate(String date) {
+<i>91</i>&nbsp;		try {
+<b class="nc"><i>92</i>&nbsp;			return httpDateFormat.parse(date);</b>
+<i>93</i>&nbsp;		}
+<b class="nc"><i>94</i>&nbsp;		catch (ParseException e) {</b>
+<b class="nc"><i>95</i>&nbsp;			LoggerFactory.getLogger(getClass()).debug(</b>
+<i>96</i>&nbsp;					&quot;ParseException on date {}. 1/1/1970 will be returned&quot;, date);
+<b class="nc"><i>97</i>&nbsp;			return new Date(0);</b>
+<i>98</i>&nbsp;		}
+<i>99</i>&nbsp;	}
+<i>100</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

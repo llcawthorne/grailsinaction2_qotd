@@ -1,0 +1,224 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GrailsChangeLogParser</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">grails.plugin.databasemigration</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GrailsChangeLogParser (grails.plugin.databasemigration)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GrailsChangeLogParser</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 25)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GrailsChangeLogParser$_setChangelogProperties_closure1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 32)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* Copyright 2010-2013 SpringSource.
+<i>2</i>&nbsp; *
+<i>3</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;)
+<i>4</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>5</i>&nbsp; * You may obtain a copy of the License at
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>10</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>11</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>12</i>&nbsp; * See the License for the specific language governing permissions and
+<i>13</i>&nbsp; * limitations under the License.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;package grails.plugin.databasemigration
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import grails.util.GrailsUtil
+<i>18</i>&nbsp;import liquibase.changelog.ChangeLogParameters
+<i>19</i>&nbsp;import liquibase.changelog.DatabaseChangeLog
+<i>20</i>&nbsp;import liquibase.exception.ChangeLogParseException
+<i>21</i>&nbsp;import liquibase.parser.ChangeLogParser
+<i>22</i>&nbsp;import liquibase.resource.ResourceAccessor
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;import org.codehaus.groovy.control.CompilerConfiguration
+<i>25</i>&nbsp;import org.slf4j.Logger
+<i>26</i>&nbsp;import org.slf4j.LoggerFactory
+<i>27</i>&nbsp;import org.springframework.context.ApplicationContext
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;/**
+<i>30</i>&nbsp; * Loads a DSL script and invokes the builder. Registered in
+<i>31</i>&nbsp; * DatabaseMigrationGrailsPlugin.doWithApplicationContext().
+<i>32</i>&nbsp; *
+<i>33</i>&nbsp; * @author &lt;a href=&#39;mailto:burt@burtbeckwith.com&#39;&gt;Burt Beckwith&lt;/a&gt;
+<i>34</i>&nbsp; */
+<i>35</i>&nbsp;class GrailsChangeLogParser implements ChangeLogParser {
+<i>36</i>&nbsp;
+<b class="nc"><i>37</i>&nbsp;	protected Logger log = LoggerFactory.getLogger(getClass())</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;	protected ApplicationContext ctx
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;	/**
+<i>42</i>&nbsp;	 * Constructor.
+<i>43</i>&nbsp;	 * @param ctx the Spring app context
+<i>44</i>&nbsp;	 */
+<i>45</i>&nbsp;	GrailsChangeLogParser(ApplicationContext ctx) {
+<b class="nc"><i>46</i>&nbsp;		this.ctx = ctx</b>
+<i>47</i>&nbsp;	}
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;	/**
+<i>50</i>&nbsp;	 * {@inheritDoc}
+<i>51</i>&nbsp;	 * @see liquibase.parser.ChangeLogParser#parse(java.lang.String, liquibase.changelog.ChangeLogParameters,
+<i>52</i>&nbsp;	 * 	liquibase.resource.ResourceAccessor)
+<i>53</i>&nbsp;	 */
+<i>54</i>&nbsp;	DatabaseChangeLog parse(String physicalChangeLogLocation,
+<i>55</i>&nbsp;			ChangeLogParameters changeLogParameters,
+<i>56</i>&nbsp;			ResourceAccessor resourceAccessor) throws ChangeLogParseException {
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;		try {
+<b class="nc"><i>59</i>&nbsp;			log.debug &quot;parsing $physicalChangeLogLocation&quot;</b>
+<i>60</i>&nbsp;
+<b class="nc"><i>61</i>&nbsp;			def inputStream = resourceAccessor.getResourceAsStream(physicalChangeLogLocation)</b>
+<b class="nc"><i>62</i>&nbsp;			if (!inputStream) {</b>
+<b class="nc"><i>63</i>&nbsp;				throw new ChangeLogParseException(&quot;$physicalChangeLogLocation not found&quot;)</b>
+<i>64</i>&nbsp;			}
+<i>65</i>&nbsp;
+<b class="nc"><i>66</i>&nbsp;			CompilerConfiguration config = new CompilerConfiguration(CompilerConfiguration.DEFAULT)</b>
+<b class="nc"><i>67</i>&nbsp;			if (config.metaClass.respondsTo(config, &#39;setDisabledGlobalASTTransformations&#39;)) {</b>
+<b class="nc"><i>68</i>&nbsp;				Set disabled = config.disabledGlobalASTTransformations ?: []</b>
+<b class="nc"><i>69</i>&nbsp;				disabled &lt;&lt; &#39;org.grails.datastore.gorm.query.transform.GlobalDetachedCriteriaASTTransformation&#39;</b>
+<b class="nc"><i>70</i>&nbsp;				config.disabledGlobalASTTransformations = disabled</b>
+<i>71</i>&nbsp;			}
+<i>72</i>&nbsp;
+<b class="nc"><i>73</i>&nbsp;			GroovyClassLoader cl = new GroovyClassLoader(Thread.currentThread().contextClassLoader, config, false)</b>
+<b class="nc"><i>74</i>&nbsp;			Script script = new GroovyShell(cl, new Binding(MigrationUtils.changelogProperties), config).parse(inputStream.text)</b>
+<b class="nc"><i>75</i>&nbsp;			script.run()</b>
+<i>76</i>&nbsp;
+<b class="nc"><i>77</i>&nbsp;			setChangelogProperties changeLogParameters</b>
+<i>78</i>&nbsp;
+<b class="nc"><i>79</i>&nbsp;			def builder = new DslBuilder(changeLogParameters, resourceAccessor,</b>
+<i>80</i>&nbsp;				physicalChangeLogLocation, ctx)
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;			def root = script.databaseChangeLog</b>
+<b class="nc"><i>83</i>&nbsp;			root.delegate = builder</b>
+<b class="nc"><i>84</i>&nbsp;			root()</b>
+<i>85</i>&nbsp;
+<b class="nc"><i>86</i>&nbsp;			builder.databaseChangeLog</b>
+<i>87</i>&nbsp;		}
+<i>88</i>&nbsp;		catch(e) {
+<b class="nc"><i>89</i>&nbsp;			println &quot;problem parsing $physicalChangeLogLocation: $e.message (re-run with --verbose to see the stacktrace)&quot;</b>
+<b class="nc"><i>90</i>&nbsp;			throw GrailsUtil.deepSanitize(e)</b>
+<i>91</i>&nbsp;		}
+<i>92</i>&nbsp;	}
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;	boolean supports(String changeLogFile, ResourceAccessor resourceAccessor) {
+<b class="nc"><i>95</i>&nbsp;		changeLogFile.toLowerCase().endsWith &#39;groovy&#39;</b>
+<i>96</i>&nbsp;	}
+<i>97</i>&nbsp;
+<b class="nc"><i>98</i>&nbsp;	int getPriority() { PRIORITY_DEFAULT }</b>
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;	protected void setChangelogProperties(ChangeLogParameters changeLogParameters) {
+<i>101</i>&nbsp;
+<b class="nc"><i>102</i>&nbsp;		MigrationUtils.changelogProperties.each { name, value -&gt;</b>
+<i>103</i>&nbsp;
+<b class="nc"><i>104</i>&nbsp;			String contexts</b>
+<b class="nc"><i>105</i>&nbsp;			String databases</b>
+<b class="nc"><i>106</i>&nbsp;			if (value instanceof Map) {</b>
+<b class="nc"><i>107</i>&nbsp;				contexts = value.contexts</b>
+<b class="nc"><i>108</i>&nbsp;				databases = value.databases</b>
+<b class="nc"><i>109</i>&nbsp;				value = value.value</b>
+<i>110</i>&nbsp;			}
+<i>111</i>&nbsp;
+<b class="nc"><i>112</i>&nbsp;			changeLogParameters.set name, value, contexts, databases</b>
+<i>113</i>&nbsp;		}
+<i>114</i>&nbsp;	}
+<i>115</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

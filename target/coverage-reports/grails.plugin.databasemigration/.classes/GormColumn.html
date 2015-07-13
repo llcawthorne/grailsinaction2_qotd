@@ -1,0 +1,228 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GormColumn</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">grails.plugin.databasemigration</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GormColumn (grails.plugin.databasemigration)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GormColumn</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 41)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GormColumn$_isIdentityColumn_closure1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 42)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* Copyright 2010-2013 SpringSource.
+<i>2</i>&nbsp; *
+<i>3</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;)
+<i>4</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>5</i>&nbsp; * You may obtain a copy of the License at
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>10</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>11</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>12</i>&nbsp; * See the License for the specific language governing permissions and
+<i>13</i>&nbsp; * limitations under the License.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;package grails.plugin.databasemigration
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import java.lang.reflect.Method
+<i>18</i>&nbsp;import java.sql.Types
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import liquibase.database.structure.Column
+<i>21</i>&nbsp;import liquibase.database.structure.Table
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * @author &lt;a href=&#39;mailto:burt@burtbeckwith.com&#39;&gt;Burt Beckwith&lt;/a&gt;
+<i>25</i>&nbsp; */
+<i>26</i>&nbsp;class GormColumn extends Column {
+<i>27</i>&nbsp;
+<b class="nc"><i>28</i>&nbsp;	protected static final List DECIMAL_TYPES = [Types.FLOAT, Types.REAL, Types.DOUBLE, Types.NUMERIC, Types.DECIMAL]</b>
+<b class="nc"><i>29</i>&nbsp;	protected static final List LENGTH_TYPES = [Types.CHAR, Types.DATE, Types.LONGVARCHAR, Types.TIME, Types.TIMESTAMP, Types.VARCHAR]</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;	protected hibernateColumn
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;	boolean sqlTypeSet = false
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;	GormColumn(Table table, /*org.hibernate.mapping.Column*/ hibernateColumn, /*org.hibernate.mapping.Table*/ hibernateTable,
+<i>36</i>&nbsp;	           /*org.hibernate.engine.Mapping*/ mapping, /*org.hibernate.dialect.Dialect*/ dialect, /*org.hibernate.cfg.Configuration*/ cfg) {
+<i>37</i>&nbsp;
+<b class="nc"><i>38</i>&nbsp;		this.hibernateColumn = hibernateColumn</b>
+<i>39</i>&nbsp;
+<b class="nc"><i>40</i>&nbsp;		int decimalDigits = hibernateColumn.scale</b>
+<b class="nc"><i>41</i>&nbsp;		int dataType = hibernateColumn.getSqlTypeCode(mapping)</b>
+<b class="nc"><i>42</i>&nbsp;		if (!typeHasScaleAndPrecision(dataType)) {</b>
+<b class="nc"><i>43</i>&nbsp;			decimalDigits = 0</b>
+<i>44</i>&nbsp;		}
+<b class="nc"><i>45</i>&nbsp;		if (!typeHasLength(dataType)) {</b>
+<b class="nc"><i>46</i>&nbsp;			decimalDigits = 0</b>
+<i>47</i>&nbsp;		}
+<i>48</i>&nbsp;
+<b class="nc"><i>49</i>&nbsp;		if (hibernateColumn.sqlType) {</b>
+<b class="nc"><i>50</i>&nbsp;			sqlTypeSet = true</b>
+<i>51</i>&nbsp;		}
+<i>52</i>&nbsp;		else {
+<b class="nc"><i>53</i>&nbsp;			hibernateColumn.sqlType = hibernateColumn.getSqlType(dialect, mapping)</b>
+<b class="nc"><i>54</i>&nbsp;			sqlTypeSet = hibernateColumn.sqlType != null</b>
+<i>55</i>&nbsp;		}
+<i>56</i>&nbsp;
+<b class="nc"><i>57</i>&nbsp;		setName hibernateColumn.name</b>
+<b class="nc"><i>58</i>&nbsp;		setDataType dataType</b>
+<b class="nc"><i>59</i>&nbsp;		setDecimalDigits decimalDigits</b>
+<b class="nc"><i>60</i>&nbsp;		setDefaultValue hibernateColumn.defaultValue</b>
+<b class="nc"><i>61</i>&nbsp;		setNullable hibernateColumn.nullable</b>
+<b class="nc"><i>62</i>&nbsp;		setPrimaryKey hibernateTable.primaryKey == null ? false : hibernateTable.primaryKey.columns.contains(hibernateColumn)</b>
+<b class="nc"><i>63</i>&nbsp;		setTable table</b>
+<b class="nc"><i>64</i>&nbsp;		setTypeName hibernateColumn.getSqlType(dialect, mapping).replaceFirst(&#39;\\(.*\\)&#39;, &#39;&#39;)</b>
+<b class="nc"><i>65</i>&nbsp;		setUnique hibernateColumn.unique</b>
+<b class="nc"><i>66</i>&nbsp;		setAutoIncrement isIdentityColumn(hibernateColumn.value, dialect, cfg)</b>
+<b class="nc"><i>67</i>&nbsp;		setCertainDataType hibernateColumn.sqlType != null</b>
+<b class="nc"><i>68</i>&nbsp;		setColumnSize isNumeric() ? hibernateColumn.precision : hibernateColumn.length</b>
+<i>69</i>&nbsp;	}
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;	def getHibernateColumn() {
+<b class="nc"><i>72</i>&nbsp;		hibernateColumn</b>
+<i>73</i>&nbsp;	}
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;	// workaround for changed method signature without backwards compatibility
+<i>76</i>&nbsp;	protected static boolean isIdentityColumn(/*org.hibernate.mapping.Value*/ value, /*org.hibernate.dialect.Dialect*/ dialect, /*org.hibernate.cfg.Configuration*/ cfg) {
+<b class="nc"><i>77</i>&nbsp;		Method method = value.getClass().methods.find { it.name == &#39;isIdentityColumn&#39; }</b>
+<b class="nc"><i>78</i>&nbsp;		if (method.getParameterTypes().length == 1) {</b>
+<i>79</i>&nbsp;			// pre-3.6 Hibernate
+<b class="nc"><i>80</i>&nbsp;			return value.isIdentityColumn(dialect)</b>
+<i>81</i>&nbsp;		}
+<i>82</i>&nbsp;
+<b class="nc"><i>83</i>&nbsp;		value.isIdentityColumn cfg.identifierGeneratorFactory, dialect</b>
+<i>84</i>&nbsp;	}
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;	// from org.hibernate.cfg.reveng.JDBCToHibernateTypeHelper
+<i>87</i>&nbsp;	protected static boolean typeHasScaleAndPrecision(int sqlType) {
+<b class="nc"><i>88</i>&nbsp;		sqlType in DECIMAL_TYPES</b>
+<i>89</i>&nbsp;	}
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;	// from org.hibernate.cfg.reveng.JDBCToHibernateTypeHelper
+<i>92</i>&nbsp;	protected static boolean typeHasLength(int sqlType) {
+<b class="nc"><i>93</i>&nbsp;		sqlType in LENGTH_TYPES</b>
+<i>94</i>&nbsp;	}
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;	// have to re-implement since base class does exact class check
+<i>97</i>&nbsp;	@Override
+<i>98</i>&nbsp;	boolean equals(other) {
+<b class="nc"><i>99</i>&nbsp;		if (is(other)) return true</b>
+<b class="nc"><i>100</i>&nbsp;		if (!(other instanceof Column)) return false</b>
+<i>101</i>&nbsp;
+<b class="nc"><i>102</i>&nbsp;		Column column = other</b>
+<i>103</i>&nbsp;
+<b class="nc"><i>104</i>&nbsp;		name.equalsIgnoreCase(column.name) &amp;&amp; column.table == table &amp;&amp; column.view == view</b>
+<i>105</i>&nbsp;	}
+<i>106</i>&nbsp;	
+<i>107</i>&nbsp;	// have to re-implement since base class does case-sensitive column-name comparison
+<i>108</i>&nbsp;	@Override
+<i>109</i>&nbsp;	int compareTo(Column o) {
+<b class="nc"><i>110</i>&nbsp;		int d</b>
+<b class="nc"><i>111</i>&nbsp;		if (table || o.table) {</b>
+<b class="nc"><i>112</i>&nbsp;			d = table &lt;=&gt; o.table</b>
+<i>113</i>&nbsp;		}
+<i>114</i>&nbsp;		else {
+<b class="nc"><i>115</i>&nbsp;			d = view &lt;=&gt; o.view</b>
+<i>116</i>&nbsp;		}
+<b class="nc"><i>117</i>&nbsp;		d ?: name.compareToIgnoreCase(o.name)</b>
+<i>118</i>&nbsp;	}
+<i>119</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

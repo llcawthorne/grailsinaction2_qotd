@@ -1,0 +1,251 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: JQueryService</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">&lt;empty package name&gt;</a> ]
+</div>
+
+<h1>Coverage Summary for Class: JQueryService (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">JQueryService</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 14)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">JQueryService$_closure1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">JQueryService$_closure2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">JQueryService$_closure3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">JQueryService$_closure4</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 24)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Copyright 2007-2009 the original author or authors.
+<i>3</i>&nbsp; *
+<i>4</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<i>5</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>6</i>&nbsp; * You may obtain a copy of the License at
+<i>7</i>&nbsp; *
+<i>8</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>9</i>&nbsp; *
+<i>10</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>11</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>12</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>13</i>&nbsp; * See the License for the specific language governing permissions and
+<i>14</i>&nbsp; * limitations under the License.
+<i>15</i>&nbsp; */
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import grails.util.Environment
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import org.springframework.beans.factory.InitializingBean
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;class JQueryService implements InitializingBean {
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    static transactional = false
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    String jsFolder
+<i>26</i>&nbsp;    String cssFolder
+<i>27</i>&nbsp;    String cssDefault
+<i>28</i>&nbsp;    String coreSuffix
+<i>29</i>&nbsp;    String minFolder
+<i>30</i>&nbsp;    String minExt
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    def grailsApplication
+<i>33</i>&nbsp;
+<b class="nc"><i>34</i>&nbsp;    def pathChecked = []</b>
+<b class="nc"><i>35</i>&nbsp;    def pathWhichDoNotExist = []</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    void afterPropertiesSet() {
+<b class="nc"><i>38</i>&nbsp;        ConfigObject config = new ConfigSlurper(Environment.current.name).parse(grailsApplication.classLoader.loadClass(&#39;JQueryConfig&#39;))</b>
+<i>39</i>&nbsp;
+<b class="nc"><i>40</i>&nbsp;        jsFolder    = config?.jquery?.sources ?: &#39;js/jquery&#39;</b>
+<b class="nc"><i>41</i>&nbsp;        coreSuffix  = config?.jquery?.coreSuffix?: &#39;core&#39;</b>
+<i>42</i>&nbsp;
+<b class="nc"><i>43</i>&nbsp;        cssFolder   = config?.jquery?.cssFolder ?: &#39;theme&#39;</b>
+<b class="nc"><i>44</i>&nbsp;        cssDefault  = config?.jquery?.cssDefault ?: &#39;base&#39;</b>
+<b class="nc"><i>45</i>&nbsp;        minFolder   = config?.jquery?.minFolder ?: &#39;minified&#39;</b>
+<b class="nc"><i>46</i>&nbsp;        minExt      = config?.jquery?.minExtentsion ?: &#39;min&#39;</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;        // to be sure we&#39;re talking about the same thing&#39;
+<b class="nc"><i>49</i>&nbsp;        if (!jsFolder.startsWith(&#39;js&#39;)) {</b>
+<b class="nc"><i>50</i>&nbsp;            jsFolder = &#39;js/&#39; + jsFolder</b>
+<i>51</i>&nbsp;        }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;        // clean or prepare the folder path
+<b class="nc"><i>54</i>&nbsp;        jsFolder    = cleanPath(jsFolder)</b>
+<b class="nc"><i>55</i>&nbsp;        cssFolder   = cleanPath(cssFolder)</b>
+<b class="nc"><i>56</i>&nbsp;        minFolder   = cleanPath(minFolder)</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    // all this is to avoid checking the filesystem too often
+<i>60</i>&nbsp;    def exist = { String dirPath, String filePath -&gt;
+<b class="nc"><i>61</i>&nbsp;        existPath(dirPath) &amp;&amp; existPath(dirPath + &#39;/&#39; + filePath)</b>
+<i>62</i>&nbsp;    }
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    def existPath = { String path -&gt;
+<b class="nc"><i>65</i>&nbsp;        if (!pathChecked.contains(path)) {</b>
+<b class="nc"><i>66</i>&nbsp;            checkPath path</b>
+<i>67</i>&nbsp;        }
+<i>68</i>&nbsp;
+<b class="nc"><i>69</i>&nbsp;        !pathWhichDoNotExist.contains(path)</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    def checkPath = {path -&gt;
+<b class="nc"><i>73</i>&nbsp;        if (!grailsApplication.mainContext.getResource(path).exists()) {</b>
+<b class="nc"><i>74</i>&nbsp;            pathWhichDoNotExist &lt;&lt; path</b>
+<i>75</i>&nbsp;        }
+<b class="nc"><i>76</i>&nbsp;        pathChecked &lt;&lt; path</b>
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    def cleanPath = { path -&gt;
+<b class="nc"><i>80</i>&nbsp;        if (path &amp;&amp; !path?.endsWith(&#39;/&#39;)) {</b>
+<b class="nc"><i>81</i>&nbsp;            path += &#39;/&#39;</b>
+<i>82</i>&nbsp;        }
+<b class="nc"><i>83</i>&nbsp;        path</b>
+<i>84</i>&nbsp;    }
+<i>85</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

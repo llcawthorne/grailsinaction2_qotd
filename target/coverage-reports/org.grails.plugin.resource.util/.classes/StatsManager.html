@@ -1,0 +1,194 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: StatsManager</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.grails.plugin.resource.util</a> ]
+</div>
+
+<h1>Coverage Summary for Class: StatsManager (org.grails.plugin.resource.util)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StatsManager</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 11)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">StatsManager$_dumpStats_closure1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">StatsManager$_dumpStats_closure1_closure2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package org.grails.plugin.resource.util
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import org.apache.commons.logging.LogFactory
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;/**
+<i>6</i>&nbsp; * Manager of statistics on loading and mapping.
+<i>7</i>&nbsp; *
+<i>8</i>&nbsp; * @author Peter N. Steinmetz
+<i>9</i>&nbsp; * Date: 3/31/13
+<i>10</i>&nbsp; * Time: 12:07 PM
+<i>11</i>&nbsp; */
+<i>12</i>&nbsp;class StatsManager {
+<b class="nc"><i>13</i>&nbsp;  def log = LogFactory.getLog(StatsManager)</b>
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;  Map statistics = [:]
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;  /**
+<i>18</i>&nbsp;   * Reset all statistics.
+<i>19</i>&nbsp;   */
+<i>20</i>&nbsp;  void resetStats() {
+<b class="nc"><i>21</i>&nbsp;    statistics.clear()</b>
+<i>22</i>&nbsp;  }
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;  /**
+<i>25</i>&nbsp;   * Get a statistic for category and subcategory.
+<i>26</i>&nbsp;   *
+<i>27</i>&nbsp;   * @param category
+<i>28</i>&nbsp;   * @param subcategory
+<i>29</i>&nbsp;   * @param defaultValue
+<i>30</i>&nbsp;   * @return
+<i>31</i>&nbsp;   */
+<i>32</i>&nbsp;  def getStatValue(category, subcategory, defaultValue = 0) {
+<b class="nc"><i>33</i>&nbsp;    def cat = statistics[category]</b>
+<b class="nc"><i>34</i>&nbsp;    if (cat == null) {</b>
+<b class="nc"><i>35</i>&nbsp;      cat = [:]</b>
+<b class="nc"><i>36</i>&nbsp;      statistics[category] = cat</b>
+<i>37</i>&nbsp;    }
+<b class="nc"><i>38</i>&nbsp;    return cat[subcategory] != null ? cat[subcategory] : defaultValue</b>
+<i>39</i>&nbsp;  }
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  /**
+<i>42</i>&nbsp;   * Store a statistic value for category and subcategory.
+<i>43</i>&nbsp;   *
+<i>44</i>&nbsp;   * @param category
+<i>45</i>&nbsp;   * @param subcategory
+<i>46</i>&nbsp;   * @param value
+<i>47</i>&nbsp;   */
+<i>48</i>&nbsp;  void storeAggregateStat(category, subcategory, value) {
+<b class="nc"><i>49</i>&nbsp;    def v = getStatValue(category, subcategory)</b>
+<b class="nc"><i>50</i>&nbsp;    statistics[category][subcategory] = v + value</b>
+<i>51</i>&nbsp;  }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;  /**
+<i>54</i>&nbsp;   * Dump statistics to log.
+<i>55</i>&nbsp;   */
+<i>56</i>&nbsp;  void dumpStats() {
+<b class="nc"><i>57</i>&nbsp;    if (log.debugEnabled) {</b>
+<b class="nc"><i>58</i>&nbsp;      statistics.each { cat, subcats -&gt;</b>
+<b class="nc"><i>59</i>&nbsp;        subcats.each { sc, v -&gt;</b>
+<b class="nc"><i>60</i>&nbsp;          log.debug &quot;  ${sc} = $v&quot;</b>
+<i>61</i>&nbsp;        }
+<i>62</i>&nbsp;      }
+<i>63</i>&nbsp;    }
+<i>64</i>&nbsp;  }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

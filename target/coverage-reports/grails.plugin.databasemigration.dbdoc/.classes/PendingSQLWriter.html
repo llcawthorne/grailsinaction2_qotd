@@ -1,0 +1,156 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PendingSQLWriter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">grails.plugin.databasemigration.dbdoc</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PendingSQLWriter (grails.plugin.databasemigration.dbdoc)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PendingSQLWriter</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* Copyright 2010-2013 SpringSource.
+<i>2</i>&nbsp; *
+<i>3</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;)
+<i>4</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>5</i>&nbsp; * You may obtain a copy of the License at
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>10</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>11</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>12</i>&nbsp; * See the License for the specific language governing permissions and
+<i>13</i>&nbsp; * limitations under the License.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;package grails.plugin.databasemigration.dbdoc
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import liquibase.change.Change
+<i>18</i>&nbsp;import liquibase.changelog.ChangeSet
+<i>19</i>&nbsp;import liquibase.changelog.DatabaseChangeLog
+<i>20</i>&nbsp;import liquibase.database.Database
+<i>21</i>&nbsp;import liquibase.exception.MigrationFailedException
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * @author &lt;a href=&#39;mailto:burt@burtbeckwith.com&#39;&gt;Burt Beckwith&lt;/a&gt;
+<i>25</i>&nbsp; */
+<i>26</i>&nbsp;class PendingSQLWriter extends HTMLWriter {
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;	protected DatabaseChangeLog databaseChangeLog
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;	PendingSQLWriter(Map files, Database database, DatabaseChangeLog databaseChangeLog) {
+<b class="nc"><i>31</i>&nbsp;		super(files, &#39;pending&#39;, database)</b>
+<b class="nc"><i>32</i>&nbsp;		this.databaseChangeLog = databaseChangeLog</b>
+<i>33</i>&nbsp;	}
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;	@Override
+<b class="nc"><i>36</i>&nbsp;	protected String createTitle(object) { &#39;Pending SQL&#39; }</b>
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;	protected void writeBody(StringBuilder content, object, List&lt;Change&gt; ranChanges, List&lt;Change&gt; changesToRun) {
+<b class="nc"><i>39</i>&nbsp;		if (!changesToRun) {</b>
+<b class="nc"><i>40</i>&nbsp;			content.append &#39;&lt;b&gt;NONE&lt;/b&gt;&#39;</b>
+<i>41</i>&nbsp;		}
+<i>42</i>&nbsp;
+<b class="nc"><i>43</i>&nbsp;		content.append &#39;&lt;code&gt;&lt;pre&gt;&#39;</b>
+<i>44</i>&nbsp;
+<b class="nc"><i>45</i>&nbsp;		ChangeSet lastRunChangeSet</b>
+<i>46</i>&nbsp;
+<b class="nc"><i>47</i>&nbsp;		for (Change change : changesToRun) {</b>
+<b class="nc"><i>48</i>&nbsp;			ChangeSet thisChangeSet = change.changeSet</b>
+<b class="nc"><i>49</i>&nbsp;			if (thisChangeSet.equals(lastRunChangeSet)) {</b>
+<b class="nc"><i>50</i>&nbsp;				continue</b>
+<i>51</i>&nbsp;			}
+<b class="nc"><i>52</i>&nbsp;			lastRunChangeSet = thisChangeSet</b>
+<b class="nc"><i>53</i>&nbsp;			String anchor = thisChangeSet.toString(false).replaceAll(&#39;\\W&#39;, &#39;_&#39;)</b>
+<b class="nc"><i>54</i>&nbsp;			content.append(&quot;&lt;a name=&#39;&quot;).append(anchor).append(&quot;&#39;/&gt;&quot;)</b>
+<i>55</i>&nbsp;			try {
+<b class="nc"><i>56</i>&nbsp;				thisChangeSet.execute databaseChangeLog, database</b>
+<i>57</i>&nbsp;			}
+<i>58</i>&nbsp;			catch (MigrationFailedException e) {
+<b class="nc"><i>59</i>&nbsp;				content.append &#39;EXECUTION ERROR: &#39;</b>
+<b class="nc"><i>60</i>&nbsp;				content.append change.changeMetaData.description</b>
+<b class="nc"><i>61</i>&nbsp;				content.append &#39;: &#39;</b>
+<b class="nc"><i>62</i>&nbsp;				content.append e.message</b>
+<b class="nc"><i>63</i>&nbsp;				content.append &#39;\n\n&#39;</b>
+<i>64</i>&nbsp;			}
+<i>65</i>&nbsp;		}
+<b class="nc"><i>66</i>&nbsp;		content.append &#39;&lt;/pre&gt;&lt;/code&gt;&#39;</b>
+<i>67</i>&nbsp;	}
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;	@Override
+<i>70</i>&nbsp;	protected void writeCustomHTML(StringBuilder content, object, List&lt;Change&gt; changes) {
+<i>71</i>&nbsp;		// do nothing
+<i>72</i>&nbsp;	}
+<i>73</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

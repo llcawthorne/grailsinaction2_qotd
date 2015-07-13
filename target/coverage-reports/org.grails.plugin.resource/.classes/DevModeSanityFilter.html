@@ -1,0 +1,144 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DevModeSanityFilter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.grails.plugin.resource</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DevModeSanityFilter (org.grails.plugin.resource)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DevModeSanityFilter</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package org.grails.plugin.resource
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import org.grails.plugin.resource.util.DispositionsUtils
+<i>4</i>&nbsp;import org.springframework.web.context.support.WebApplicationContextUtils
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import javax.servlet.*
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * This just traps any obvious mistakes the user has made and warns them in dev mode
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * @author Marc Palmer (marc@grailsrocks.com)
+<i>12</i>&nbsp; */
+<i>13</i>&nbsp;class DevModeSanityFilter implements Filter {
+<i>14</i>&nbsp;    static RELOADING_DOC = &quot;&quot;&quot;
+<i>15</i>&nbsp;&lt;html&gt;
+<i>16</i>&nbsp;&lt;head&gt;
+<i>17</i>&nbsp;&lt;meta http-equiv=\&quot;refresh\&quot; content=&quot;1&quot;&gt;&lt;/meta&gt;
+<i>18</i>&nbsp;&lt;style type=&quot;text/css&quot; media=&quot;screen&quot;&gt;
+<i>19</i>&nbsp;    body {font-size:75%;color:#222;background:#fff;font-family:&quot;Helvetica Neue&quot;, Arial, Helvetica, sans-serif; text-align: center;margin-top:200px}
+<i>20</i>&nbsp;    h1 {font-weight:normal;color:#111;}
+<i>21</i>&nbsp;&lt;/style&gt;
+<i>22</i>&nbsp;&lt;/head&gt;
+<i>23</i>&nbsp;&lt;body&gt;
+<i>24</i>&nbsp;&lt;h1&gt;Resources are being processed, please wait...&lt;/h1&gt;
+<i>25</i>&nbsp;&lt;/body&gt;
+<i>26</i>&nbsp;&lt;/html&gt;&quot;&quot;&quot;
+<i>27</i>&nbsp;    
+<i>28</i>&nbsp;    def grailsResourceProcessor
+<i>29</i>&nbsp;    
+<i>30</i>&nbsp;    void init(FilterConfig config) throws ServletException {
+<b class="nc"><i>31</i>&nbsp;        def applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)</b>
+<b class="nc"><i>32</i>&nbsp;        grailsResourceProcessor = applicationContext.grailsResourceProcessor</b>
+<i>33</i>&nbsp;    }
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    void destroy() {
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    void doFilter(ServletRequest request, ServletResponse response,
+<i>39</i>&nbsp;        FilterChain chain) throws IOException, ServletException {
+<i>40</i>&nbsp;
+<b class="nc"><i>41</i>&nbsp;        if (grailsResourceProcessor.reloading) {</b>
+<b class="nc"><i>42</i>&nbsp;            response.contentType = &quot;text/html&quot;</b>
+<b class="nc"><i>43</i>&nbsp;            response.writer &lt;&lt; RELOADING_DOC</b>
+<i>44</i>&nbsp;        } else {
+<b class="nc"><i>45</i>&nbsp;            chain.doFilter(request, response)</b>
+<i>46</i>&nbsp;
+<b class="nc"><i>47</i>&nbsp;            if (request.getAttribute(&#39;resources.need.layout&#39;)) {</b>
+<b class="nc"><i>48</i>&nbsp;                def dispositionsLeftOver = DispositionsUtils.getRequestDispositionsRemaining(request)</b>
+<b class="nc"><i>49</i>&nbsp;                if (dispositionsLeftOver) {</b>
+<i>50</i>&nbsp;                    // :TODO: should move this initialization from ResourceProcessor
+<b class="nc"><i>51</i>&nbsp;                    def optionals = grailsResourceProcessor.optionalDispositions</b>
+<b class="nc"><i>52</i>&nbsp;                    dispositionsLeftOver -= optionals</b>
+<b class="nc"><i>53</i>&nbsp;                    if (dispositionsLeftOver) {</b>
+<b class="nc"><i>54</i>&nbsp;                        throw new RuntimeException(&quot;It looks like you are missing some calls to the r:layoutResources tag. &quot;+</b>
+<i>55</i>&nbsp;                            &quot;After rendering your page the following have not been rendered: ${dispositionsLeftOver}&quot;)
+<i>56</i>&nbsp;                    }
+<i>57</i>&nbsp;                }
+<i>58</i>&nbsp;            }
+<i>59</i>&nbsp;        }
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

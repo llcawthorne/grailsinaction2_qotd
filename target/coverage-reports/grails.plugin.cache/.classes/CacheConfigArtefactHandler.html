@@ -1,0 +1,192 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CacheConfigArtefactHandler</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">grails.plugin.cache</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CacheConfigArtefactHandler (grails.plugin.cache)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CacheConfigArtefactHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CacheConfigArtefactHandler$DefaultCacheConfigGrailsClass</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* Copyright 2012-2013 SpringSource.
+<i>2</i>&nbsp; *
+<i>3</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<i>4</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>5</i>&nbsp; * You may obtain a copy of the License at
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>10</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>11</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>12</i>&nbsp; * See the License for the specific language governing permissions and
+<i>13</i>&nbsp; * limitations under the License.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;package grails.plugin.cache;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import groovy.lang.GroovySystem;
+<i>18</i>&nbsp;import groovy.lang.MetaClass;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import org.codehaus.groovy.grails.commons.AbstractInjectableGrailsClass;
+<i>21</i>&nbsp;import org.codehaus.groovy.grails.commons.ArtefactHandlerAdapter;
+<i>22</i>&nbsp;import org.codehaus.groovy.grails.commons.InjectableGrailsClass;
+<i>23</i>&nbsp;import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+<i>24</i>&nbsp;import org.springframework.context.ConfigurableApplicationContext;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;/**
+<i>27</i>&nbsp; * Artefact handler for CacheConfig classes.
+<i>28</i>&nbsp; *
+<i>29</i>&nbsp; * @author Burt Beckwith
+<i>30</i>&nbsp; */
+<i>31</i>&nbsp;public class CacheConfigArtefactHandler extends ArtefactHandlerAdapter {
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;	/** The artefact type. */
+<i>34</i>&nbsp;	public static final String TYPE = &quot;CacheConfig&quot;;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;	/**
+<i>37</i>&nbsp;	 * Default constructor.
+<i>38</i>&nbsp;	 */
+<i>39</i>&nbsp;	public CacheConfigArtefactHandler() {
+<b class="nc"><i>40</i>&nbsp;		super(TYPE, CacheConfigGrailsClass.class, DefaultCacheConfigGrailsClass.class, TYPE);</b>
+<i>41</i>&nbsp;	}
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;	/**
+<i>44</i>&nbsp;	 * GrailsClass interface for CacheConfig definitions.
+<i>45</i>&nbsp;	 */
+<i>46</i>&nbsp;	public static interface CacheConfigGrailsClass extends InjectableGrailsClass {
+<i>47</i>&nbsp;		// no methods
+<i>48</i>&nbsp;	}
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;	/**
+<i>51</i>&nbsp;	 * Default implementation of &lt;code&gt;CacheConfigGrailsClass&lt;/code&gt;.
+<i>52</i>&nbsp;	 */
+<i>53</i>&nbsp;	public static class DefaultCacheConfigGrailsClass extends AbstractInjectableGrailsClass
+<i>54</i>&nbsp;	       implements CacheConfigGrailsClass {
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;		/**
+<i>57</i>&nbsp;		 * Default constructor.
+<i>58</i>&nbsp;		 * @param wrappedClass
+<i>59</i>&nbsp;		 */
+<i>60</i>&nbsp;		public DefaultCacheConfigGrailsClass(Class&lt;?&gt; wrappedClass) {
+<b class="nc"><i>61</i>&nbsp;			super(wrappedClass, CacheConfigArtefactHandler.TYPE);</b>
+<i>62</i>&nbsp;		}
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;		@Override
+<i>65</i>&nbsp;		public MetaClass getMetaClass() {
+<i>66</i>&nbsp;			// Workaround for http://jira.codehaus.org/browse/GRAILS-4542
+<b class="nc"><i>67</i>&nbsp;			return GroovySystem.getMetaClassRegistry().getMetaClass(DefaultCacheConfigGrailsClass.class);</b>
+<i>68</i>&nbsp;		}
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;		@Override
+<i>71</i>&nbsp;		public Object newInstance() {
+<b class="nc"><i>72</i>&nbsp;			Object instance = super.newInstance();</b>
+<b class="nc"><i>73</i>&nbsp;			autowireBeanProperties(instance);</b>
+<b class="nc"><i>74</i>&nbsp;			return instance;</b>
+<i>75</i>&nbsp;		}
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;		protected void autowireBeanProperties(Object instance) {
+<b class="nc"><i>78</i>&nbsp;			ConfigurableApplicationContext ctx = (ConfigurableApplicationContext)grailsApplication.getMainContext();</b>
+<b class="nc"><i>79</i>&nbsp;			ctx.getBeanFactory().autowireBeanProperties(instance,</b>
+<i>80</i>&nbsp;					AutowireCapableBeanFactory.AUTOWIRE_BY_NAME, false);
+<i>81</i>&nbsp;		}
+<i>82</i>&nbsp;	}
+<i>83</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,321 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ResourceModule</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.grails.plugin.resource</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ResourceModule (org.grails.plugin.resource)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ResourceModule</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 68)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ResourceModule$_closure1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ResourceModule$_getRequiredDispositions_closure3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ResourceModule$_newResourceFromArgs_closure2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 79)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package org.grails.plugin.resource
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
+<i>4</i>&nbsp;import java.util.concurrent.CopyOnWriteArrayList
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;/**
+<i>7</i>&nbsp; * Holder for info about a module declaration at runtime
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * @author Marc Palmer (marc@grailsrocks.com)
+<i>10</i>&nbsp; * @author Luke Daley (ld@ldaley.com)
+<i>11</i>&nbsp; */
+<i>12</i>&nbsp;class ResourceModule {
+<i>13</i>&nbsp;    String name
+<i>14</i>&nbsp;    String cachedMarkup // Saves calling the tags every time
+<i>15</i>&nbsp;    
+<b class="nc"><i>16</i>&nbsp;    List&lt;ResourceMeta&gt; resources = new CopyOnWriteArrayList&lt;ResourceMeta&gt;()</b>
+<i>17</i>&nbsp;
+<b class="nc"><i>18</i>&nbsp;    List&lt;String&gt; dependsOn = []</b>
+<i>19</i>&nbsp;    def defaultBundle
+<i>20</i>&nbsp;    
+<i>21</i>&nbsp;    
+<i>22</i>&nbsp;    def pluginManager
+<i>23</i>&nbsp;    
+<i>24</i>&nbsp;    private HashSet&lt;String&gt; dispositions
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * Constructor for testing only
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    ResourceModule() {
+<i>30</i>&nbsp;    }
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    ResourceModule(name, svc) {
+<b class="nc"><i>33</i>&nbsp;        this.name = name</b>
+<b class="nc"><i>34</i>&nbsp;        this.pluginManager = svc.pluginManager</b>
+<b class="nc"><i>35</i>&nbsp;        this.defaultBundle = false</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;    
+<i>38</i>&nbsp;    ResourceModule(name, Map resourceInfo, defBundle, svc) {
+<b class="nc"><i>39</i>&nbsp;        this(name, svc)</b>
+<b class="nc"><i>40</i>&nbsp;        this.defaultBundle = defBundle</b>
+<b class="nc"><i>41</i>&nbsp;        def args = [:]</b>
+<b class="nc"><i>42</i>&nbsp;        args.putAll(resourceInfo)</b>
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;        if (args.url == null) {</b>
+<b class="nc"><i>45</i>&nbsp;            throw new IllegalArgumentException(&quot;Cannot create resource with arguments ${args}, url is not set&quot;)</b>
+<i>46</i>&nbsp;        }
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;        if (args.url instanceof Map) {</b>
+<b class="nc"><i>49</i>&nbsp;            args.url = svc.buildLinkToOriginalResource(args.url)</b>
+<i>50</i>&nbsp;        }
+<b class="nc"><i>51</i>&nbsp;        this.resources &lt;&lt; newResourceFromArgs(args, svc, true)</b>
+<b class="nc"><i>52</i>&nbsp;        lockDown()</b>
+<i>53</i>&nbsp;    }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    ResourceModule(name, List resourceInfoList, defBundle, svc) {
+<b class="nc"><i>56</i>&nbsp;        this(name, svc)</b>
+<b class="nc"><i>57</i>&nbsp;        this.defaultBundle = defBundle</b>
+<b class="nc"><i>58</i>&nbsp;        resourceInfoList.each { i -&gt;</b>
+<b class="nc"><i>59</i>&nbsp;            if (i instanceof Map) {</b>
+<b class="nc"><i>60</i>&nbsp;                def args = i.clone()</b>
+<b class="nc"><i>61</i>&nbsp;                if (args.url instanceof Map) {</b>
+<b class="nc"><i>62</i>&nbsp;                    args.url = svc.buildLinkToOriginalResource(args.url)</b>
+<i>63</i>&nbsp;                }
+<b class="nc"><i>64</i>&nbsp;                def r = newResourceFromArgs(args, svc, resourceInfoList.size()==1)</b>
+<b class="nc"><i>65</i>&nbsp;                this.resources &lt;&lt; r</b>
+<b class="nc"><i>66</i>&nbsp;            } else if (i instanceof String) {</b>
+<b class="nc"><i>67</i>&nbsp;                this.resources &lt;&lt; newResourceFromArgs(url:i, svc, resourceInfoList.size()==1)</b>
+<i>68</i>&nbsp;            } else {
+<b class="nc"><i>69</i>&nbsp;                throw new IllegalArgumentException(&quot;I don&#39;t understand this resource: ${i}&quot;)</b>
+<i>70</i>&nbsp;            }
+<i>71</i>&nbsp;        }
+<b class="nc"><i>72</i>&nbsp;        lockDown()</b>
+<i>73</i>&nbsp;    }
+<i>74</i>&nbsp;    
+<i>75</i>&nbsp;    void addModuleDependency(String name) {
+<b class="nc"><i>76</i>&nbsp;        dependsOn &lt;&lt; name</b>
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;    
+<i>79</i>&nbsp;    def getBundleTypes() {
+<b class="nc"><i>80</i>&nbsp;        [&#39;css&#39;, &#39;js&#39;]</b>
+<i>81</i>&nbsp;    }
+<i>82</i>&nbsp;    
+<i>83</i>&nbsp;    ResourceMeta addNewSyntheticResource(Class&lt;ResourceMeta&gt; type, String uri, resSvc) {
+<b class="nc"><i>84</i>&nbsp;        def agg = type.newInstance(module:this)</b>
+<b class="nc"><i>85</i>&nbsp;        agg.sourceUrl = uri // Hack</b>
+<b class="nc"><i>86</i>&nbsp;        agg.actualUrl = uri</b>
+<b class="nc"><i>87</i>&nbsp;        agg.workDir = resSvc.workDir</b>
+<i>88</i>&nbsp;        
+<b class="nc"><i>89</i>&nbsp;        resources &lt;&lt; agg</b>
+<i>90</i>&nbsp;        
+<b class="nc"><i>91</i>&nbsp;        agg</b>
+<i>92</i>&nbsp;    }
+<i>93</i>&nbsp;    
+<i>94</i>&nbsp;    ResourceMeta newResourceFromArgs(Map args, svc, boolean singleResourceModule) {
+<b class="nc"><i>95</i>&nbsp;        def url = args.remove(&#39;url&#39;)</b>
+<b class="nc"><i>96</i>&nbsp;        if (url) {</b>
+<b class="nc"><i>97</i>&nbsp;            if (!URLUtils.isExternalURL(url) &amp;&amp; !url.startsWith(&#39;/&#39;)) {</b>
+<b class="nc"><i>98</i>&nbsp;                url = &#39;/&#39;+url</b>
+<i>99</i>&nbsp;            }
+<i>100</i>&nbsp;        }
+<b class="nc"><i>101</i>&nbsp;        if (url == null) {</b>
+<b class="nc"><i>102</i>&nbsp;            throw new IllegalArgumentException(&quot;Cannot create resource with arguments ${args}, url is not set&quot;)</b>
+<i>103</i>&nbsp;        }
+<b class="nc"><i>104</i>&nbsp;        def r = new ResourceMeta(sourceUrl: url , workDir: svc.workDir, module:this)</b>
+<b class="nc"><i>105</i>&nbsp;        def ti = svc.getDefaultSettingsForURI(url, args.attrs?.type)</b>
+<b class="nc"><i>106</i>&nbsp;        if (ti == null) {</b>
+<b class="nc"><i>107</i>&nbsp;            throw new IllegalArgumentException(&quot;Cannot create resource $url, is not a supported type&quot;)</b>
+<i>108</i>&nbsp;        }
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;        // Default the resource id for overrides to the url if no id supplied
+<b class="nc"><i>111</i>&nbsp;        r.id = args.id ?: r.sourceUrl // minus the params etc</b>
+<i>112</i>&nbsp;
+<b class="nc"><i>113</i>&nbsp;        r.disposition = args.remove(&#39;disposition&#39;) ?: ti.disposition</b>
+<b class="nc"><i>114</i>&nbsp;        r.linkOverride = args.remove(&#39;linkOverride&#39;)</b>
+<b class="nc"><i>115</i>&nbsp;        r.bundle = args.remove(&#39;bundle&#39;)</b>
+<b class="nc"><i>116</i>&nbsp;        def excludedMappers = args.remove(&#39;exclude&#39;)</b>
+<b class="nc"><i>117</i>&nbsp;        if (excludedMappers) {</b>
+<b class="nc"><i>118</i>&nbsp;            if (excludedMappers instanceof List) {</b>
+<b class="nc"><i>119</i>&nbsp;                r.excludedMappers = excludedMappers as Set</b>
+<b class="nc"><i>120</i>&nbsp;            } else if (!(excludedMappers instanceof Set)) {</b>
+<b class="nc"><i>121</i>&nbsp;                r.excludedMappers = excludedMappers.toString().split(&#39;,&#39;)*.trim() as Set</b>
+<i>122</i>&nbsp;            }
+<i>123</i>&nbsp;        } 
+<i>124</i>&nbsp;        
+<i>125</i>&nbsp;        // We cannot auto bundle this if attrs, wrapper are set, or its a single resource module, or its not
+<i>126</i>&nbsp;        // a bundle-able type
+<i>127</i>&nbsp;        def canAutoBundle = 
+<b class="nc"><i>128</i>&nbsp;            (!singleResourceModule || (singleResourceModule &amp;&amp; defaultBundle)) &amp;&amp; // single resource with defaultbundle specified is OK</b>
+<i>129</i>&nbsp;            !r.bundle &amp;&amp; 
+<i>130</i>&nbsp;            !args.wrapper &amp;&amp; 
+<i>131</i>&nbsp;            !args.attrs &amp;&amp; 
+<b class="nc"><i>132</i>&nbsp;            (r.sourceUrlExtension in bundleTypes)</b>
+<i>133</i>&nbsp;            
+<b class="nc"><i>134</i>&nbsp;        if (canAutoBundle) {</b>
+<b class="nc"><i>135</i>&nbsp;            if (defaultBundle == null) {</b>
+<i>136</i>&nbsp;                // use module name by default
+<b class="nc"><i>137</i>&nbsp;                r.bundle = &quot;bundle_$name&quot;</b>
+<b class="nc"><i>138</i>&nbsp;            } else if (defaultBundle) { </b>
+<i>139</i>&nbsp;                // use supplied value as a default
+<b class="nc"><i>140</i>&nbsp;                r.bundle = defaultBundle.toString()</b>
+<i>141</i>&nbsp;            }
+<i>142</i>&nbsp;        }
+<i>143</i>&nbsp;        
+<i>144</i>&nbsp;        // Namespace bundle by disposition
+<b class="nc"><i>145</i>&nbsp;        if (r.bundle) { </b>
+<b class="nc"><i>146</i>&nbsp;            r.bundle += &#39;_&#39;+r.disposition</b>
+<i>147</i>&nbsp;        }
+<i>148</i>&nbsp;        
+<b class="nc"><i>149</i>&nbsp;        r.prePostWrapper = args.remove(&#39;wrapper&#39;)</b>
+<b class="nc"><i>150</i>&nbsp;        def resattrs = ti.attrs?.clone() ?: [:]</b>
+<b class="nc"><i>151</i>&nbsp;        def attrs = args.remove(&#39;attrs&#39;)</b>
+<b class="nc"><i>152</i>&nbsp;        if (attrs) {</b>
+<b class="nc"><i>153</i>&nbsp;            attrs.each { k, v -&gt;</b>
+<b class="nc"><i>154</i>&nbsp;                resattrs[k] = v</b>
+<i>155</i>&nbsp;            }
+<i>156</i>&nbsp;        }
+<b class="nc"><i>157</i>&nbsp;        r.tagAttributes = resattrs</b>
+<b class="nc"><i>158</i>&nbsp;        r.attributes.putAll(args)</b>
+<b class="nc"><i>159</i>&nbsp;        return r        </b>
+<i>160</i>&nbsp;    }
+<i>161</i>&nbsp;    
+<i>162</i>&nbsp;    void lockDown() {
+<b class="nc"><i>163</i>&nbsp;        this.resources = this.resources.asImmutable()</b>
+<i>164</i>&nbsp;    }
+<i>165</i>&nbsp;    
+<i>166</i>&nbsp;    Set&lt;String&gt; getRequiredDispositions() {
+<b class="nc"><i>167</i>&nbsp;        if (!dispositions) {</b>
+<b class="nc"><i>168</i>&nbsp;            dispositions = (resources.findAll { r -&gt; </b>
+<b class="nc"><i>169</i>&nbsp;                r.disposition</b>
+<i>170</i>&nbsp;            }).disposition as Set
+<i>171</i>&nbsp;        }
+<b class="nc"><i>172</i>&nbsp;        return dispositions</b>
+<i>173</i>&nbsp;    }
+<i>174</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

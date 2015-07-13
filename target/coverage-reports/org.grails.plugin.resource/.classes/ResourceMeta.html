@@ -1,0 +1,580 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ResourceMeta</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.grails.plugin.resource</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ResourceMeta (org.grails.plugin.resource)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ResourceMeta</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 33)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 154)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ResourceMeta$_reset_closure1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 34)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 155)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package org.grails.plugin.resource
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import org.slf4j.LoggerFactory
+<i>4</i>&nbsp;import org.springframework.core.io.Resource
+<i>5</i>&nbsp;import org.springframework.core.io.UrlResource
+<i>6</i>&nbsp;import org.apache.commons.io.FilenameUtils
+<i>7</i>&nbsp;import org.springframework.core.io.FileSystemResource
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import org.grails.plugin.resource.mapper.ResourceMapper
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;/**
+<i>12</i>&nbsp; * Holder for info about a resource declaration at runtime
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This is actually non-trivial. A lot of data kept here. Be wary of what you think a &quot;url&quot; is. 
+<i>15</i>&nbsp; * See the javadocs for each URL property.
+<i>16</i>&nbsp; *
+<i>17</i>&nbsp; * @author Marc Palmer (marc@grailsrocks.com)
+<i>18</i>&nbsp; * @author Luke Daley (ld@ldaley.com)
+<i>19</i>&nbsp; */
+<i>20</i>&nbsp;class ResourceMeta {
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    static final PROCESSED_BY_PREFIX = &#39;processed.by.&#39;
+<i>23</i>&nbsp;    
+<b class="nc"><i>24</i>&nbsp;    def log = LoggerFactory.getLogger(ResourceMeta)</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * The optional module-unique id
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    String id
+<i>30</i>&nbsp;    
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * The owning module
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    ResourceModule module
+<i>35</i>&nbsp;    
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * Set on instantiation to be the dir that content is served from
+<i>38</i>&nbsp;     * 
+<i>39</i>&nbsp;     * @see ResourceProcessor#workDir
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    File workDir
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    /**
+<i>44</i>&nbsp;     * The original Url provided in the mapping declaration, verbatim
+<i>45</i>&nbsp;     */
+<i>46</i>&nbsp;    String originalUrl
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /**
+<i>49</i>&nbsp;     * The app-relative url of the LOCAL source of this resource, minus query params
+<i>50</i>&nbsp;     */
+<i>51</i>&nbsp;    String sourceUrl
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    /**
+<i>54</i>&nbsp;     * The original file extension of the resource
+<i>55</i>&nbsp;     */
+<i>56</i>&nbsp;    String sourceUrlExtension
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /**
+<i>59</i>&nbsp;     * The original sourceUrlParamsAndFragment of the resource, if any
+<i>60</i>&nbsp;     */
+<i>61</i>&nbsp;    String sourceUrlParamsAndFragment
+<i>62</i>&nbsp;    
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * The url of the local resource, after processing. (no query params)
+<i>65</i>&nbsp;     */
+<i>66</i>&nbsp;    String actualUrl
+<i>67</i>&nbsp;    
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * The url to use when rendering links - e.g. for absolute CDN overrides
+<i>70</i>&nbsp;     */
+<i>71</i>&nbsp;    String linkOverride
+<i>72</i>&nbsp;    
+<i>73</i>&nbsp;    String bundle
+<i>74</i>&nbsp;    
+<i>75</i>&nbsp;    /**
+<i>76</i>&nbsp;     * The original mime type
+<i>77</i>&nbsp;     */
+<i>78</i>&nbsp;    String contentType
+<i>79</i>&nbsp;    
+<i>80</i>&nbsp;    /**
+<i>81</i>&nbsp;     * Where do you want this resource? &quot;defer&quot;, &quot;head&quot; etc
+<i>82</i>&nbsp;     */
+<i>83</i>&nbsp;    String disposition
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    Set excludedMappers
+<i>86</i>&nbsp;    
+<i>87</i>&nbsp;    // For per-resource options like &quot;nominify&quot;, &#39;nozip&#39;
+<i>88</i>&nbsp;    Map attributes = [:]
+<i>89</i>&nbsp;    
+<i>90</i>&nbsp;    // For per-resource tag resource attributes like &quot;media&quot;, &#39;width&#39;, &#39;height&#39; etc
+<i>91</i>&nbsp;    Map tagAttributes = [:]
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    Closure prePostWrapper
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    // ***** Below here is state we determine at runtime during processing *******
+<i>96</i>&nbsp;    
+<i>97</i>&nbsp;    /**
+<i>98</i>&nbsp;     * The delegate to actually use when linking, if any. Think bundling.
+<i>99</i>&nbsp;     */
+<i>100</i>&nbsp;    private ResourceMeta delegate
+<i>101</i>&nbsp;    
+<i>102</i>&nbsp;    Resource originalResource
+<i>103</i>&nbsp;    
+<i>104</i>&nbsp;    Long originalSize
+<i>105</i>&nbsp;    
+<i>106</i>&nbsp;    Long processedSize
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    File processedFile
+<i>109</i>&nbsp;    
+<i>110</i>&nbsp;    long originalLastMod
+<i>111</i>&nbsp;    
+<i>112</i>&nbsp;    // A list of Closures taking request &amp; response. Delegates to resourceMeta
+<b class="nc"><i>113</i>&nbsp;    List requestProcessors = []</b>
+<i>114</i>&nbsp;    
+<i>115</i>&nbsp;    private String _linkUrl
+<i>116</i>&nbsp;    
+<i>117</i>&nbsp;    private boolean processed
+<i>118</i>&nbsp;    
+<i>119</i>&nbsp;    private Boolean _resourceExists
+<i>120</i>&nbsp;    
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * The URI of the resource that resulted in the processing of this resource, or null
+<i>123</i>&nbsp;     * For resources ref&#39;d in CSS or stuff loaded up by bundles for example
+<i>124</i>&nbsp;     */
+<i>125</i>&nbsp;    String declaringResource
+<i>126</i>&nbsp;    
+<i>127</i>&nbsp;    Integer contentLength
+<i>128</i>&nbsp;    
+<i>129</i>&nbsp;    Integer originalContentLength = 0
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    void delegateTo(ResourceMeta target) {
+<b class="nc"><i>132</i>&nbsp;        delegate = target</b>
+<i>133</i>&nbsp;        
+<i>134</i>&nbsp;        // No more processing to be done on us
+<b class="nc"><i>135</i>&nbsp;        processed = true</b>
+<i>136</i>&nbsp;    }
+<i>137</i>&nbsp;    
+<i>138</i>&nbsp;    boolean isOriginalAbsolute() {
+<b class="nc"><i>139</i>&nbsp;        sourceUrl.indexOf(&#39;:/&#39;) &gt; 0</b>
+<i>140</i>&nbsp;    }
+<i>141</i>&nbsp;    
+<i>142</i>&nbsp;    boolean isActualAbsolute() {
+<b class="nc"><i>143</i>&nbsp;        actualUrl.indexOf(&#39;:/&#39;) &gt; 0</b>
+<i>144</i>&nbsp;    }
+<i>145</i>&nbsp;    
+<i>146</i>&nbsp;    boolean isDirty() {
+<b class="nc"><i>147</i>&nbsp;        !originalResource || </b>
+<b class="nc"><i>148</i>&nbsp;        (originalResource.lastModified() != originalLastMod)</b>
+<i>149</i>&nbsp;    }
+<i>150</i>&nbsp;    
+<i>151</i>&nbsp;    boolean needsProcessing() {
+<b class="nc"><i>152</i>&nbsp;        processed</b>
+<i>153</i>&nbsp;    }
+<i>154</i>&nbsp;    
+<i>155</i>&nbsp;    void updateContentLength() {
+<b class="nc"><i>156</i>&nbsp;        if (processedFile) {</b>
+<b class="nc"><i>157</i>&nbsp;            this.@contentLength = processedFile.size().toInteger()</b>
+<b class="nc"><i>158</i>&nbsp;        } else if (originalResource?.URL.protocol in [&#39;jndi&#39;, &#39;file&#39;]) { </b>
+<b class="nc"><i>159</i>&nbsp;            this.@contentLength = getOriginalResourceLength()</b>
+<i>160</i>&nbsp;        } else {
+<b class="nc"><i>161</i>&nbsp;            this.@contentLength = 0</b>
+<i>162</i>&nbsp;        }
+<i>163</i>&nbsp;    }
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;    long getOriginalResourceLength() {
+<b class="nc"><i>166</i>&nbsp;        if (originalResource &amp;&amp; (originalResource instanceof FileSystemResource)) {</b>
+<b class="nc"><i>167</i>&nbsp;            return originalResource.file.size()</b>
+<i>168</i>&nbsp;        } else {
+<i>169</i>&nbsp;            // This may not close the connection in a timely manner if non-HTTP URL
+<b class="nc"><i>170</i>&nbsp;            return originalResource?.URL.openConnection().contentLength        </b>
+<i>171</i>&nbsp;        }
+<i>172</i>&nbsp;    }
+<i>173</i>&nbsp;
+<i>174</i>&nbsp;    void setOriginalResource(Resource res) {
+<b class="nc"><i>175</i>&nbsp;        this.originalResource = res</b>
+<b class="nc"><i>176</i>&nbsp;        updateExists()</b>
+<b class="nc"><i>177</i>&nbsp;        this.originalContentLength = getOriginalResourceLength()</b>
+<b class="nc"><i>178</i>&nbsp;        updateContentLength()</b>
+<i>179</i>&nbsp;    }
+<i>180</i>&nbsp;    
+<i>181</i>&nbsp;    void setProcessedFile(File f) {
+<b class="nc"><i>182</i>&nbsp;        this.processedFile = f</b>
+<b class="nc"><i>183</i>&nbsp;        updateExists()</b>
+<b class="nc"><i>184</i>&nbsp;        updateContentLength()</b>
+<i>185</i>&nbsp;    }
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;    void updateExists() {
+<b class="nc"><i>188</i>&nbsp;        if (processedFile) {</b>
+<b class="nc"><i>189</i>&nbsp;            _resourceExists = processedFile.exists()</b>
+<b class="nc"><i>190</i>&nbsp;            if (!this.originalLastMod &amp;&amp; _resourceExists) {</b>
+<b class="nc"><i>191</i>&nbsp;                this.originalLastMod = processedFile.lastModified()</b>
+<i>192</i>&nbsp;            }
+<b class="nc"><i>193</i>&nbsp;            if (this.originalSize == null) {</b>
+<b class="nc"><i>194</i>&nbsp;                this.originalSize = _resourceExists ? processedFile.length() : 0</b>
+<i>195</i>&nbsp;            }
+<b class="nc"><i>196</i>&nbsp;        } else if (originalResource) {</b>
+<b class="nc"><i>197</i>&nbsp;            _resourceExists = originalResource.exists()            </b>
+<b class="nc"><i>198</i>&nbsp;            if (!this.originalLastMod &amp;&amp; _resourceExists) {</b>
+<b class="nc"><i>199</i>&nbsp;                this.originalLastMod = originalResource.lastModified()</b>
+<i>200</i>&nbsp;            }
+<i>201</i>&nbsp;        }
+<i>202</i>&nbsp;    }
+<i>203</i>&nbsp;    private void copyOriginalResourceToWorkArea() {
+<b class="nc"><i>204</i>&nbsp;        def inputStream = this.originalResource.inputStream</b>
+<i>205</i>&nbsp;        try {
+<i>206</i>&nbsp;            // Now copy in the resource from this app deployment into the cache, ready for mutation
+<b class="nc"><i>207</i>&nbsp;            this.processedFile &lt;&lt; inputStream</b>
+<b class="nc"><i>208</i>&nbsp;            _resourceExists = this.processedFile.exists()</b>
+<i>209</i>&nbsp;        } finally {
+<b class="nc"><i>210</i>&nbsp;            inputStream?.close()                    </b>
+<i>211</i>&nbsp;        }
+<i>212</i>&nbsp;    }
+<i>213</i>&nbsp;
+<i>214</i>&nbsp;    /**
+<i>215</i>&nbsp;     * Return a new input stream for serving the resource - if processing is disabled 
+<i>216</i>&nbsp;     * the processedFile will be null and the original resource is used
+<i>217</i>&nbsp;     */
+<i>218</i>&nbsp;    InputStream newInputStream() {
+<b class="nc"><i>219</i>&nbsp;        return processedFile ? processedFile.newInputStream() : originalResource.inputStream</b>
+<i>220</i>&nbsp;    }
+<i>221</i>&nbsp;    
+<i>222</i>&nbsp;    // Hook for when preparation is starting
+<i>223</i>&nbsp;    void beginPrepare(grailsResourceProcessor) {
+<b class="nc"><i>224</i>&nbsp;        def uri = this.sourceUrl</b>
+<b class="nc"><i>225</i>&nbsp;        if (!URLUtils.isExternalURL(uri)) {</b>
+<i>226</i>&nbsp;            
+<i>227</i>&nbsp;            // Delete whatever file may already be there
+<b class="nc"><i>228</i>&nbsp;            processedFile?.delete()</b>
+<i>229</i>&nbsp;            
+<b class="nc"><i>230</i>&nbsp;    		def uriWithoutFragment = uri</b>
+<b class="nc"><i>231</i>&nbsp;    		if (uri.contains(&#39;#&#39;)) {</b>
+<b class="nc"><i>232</i>&nbsp;    			uriWithoutFragment = uri.substring(0, uri.indexOf(&#39;#&#39;))</b>
+<i>233</i>&nbsp;    		}
+<i>234</i>&nbsp;
+<b class="nc"><i>235</i>&nbsp;            def origResourceURL = grailsResourceProcessor.getOriginalResourceURLForURI(uriWithoutFragment)</b>
+<b class="nc"><i>236</i>&nbsp;            if (!origResourceURL) {</b>
+<b class="nc"><i>237</i>&nbsp;                if (log.errorEnabled) {</b>
+<b class="nc"><i>238</i>&nbsp;                    if (this.declaringResource) {</b>
+<b class="nc"><i>239</i>&nbsp;                        log.error &quot;While processing ${this.declaringResource}, a resource was required but not found: ${uriWithoutFragment}&quot;</b>
+<i>240</i>&nbsp;                    } else {
+<b class="nc"><i>241</i>&nbsp;                        log.error &quot;Resource not found: ${uriWithoutFragment}&quot;</b>
+<i>242</i>&nbsp;                    }
+<i>243</i>&nbsp;                }
+<b class="nc"><i>244</i>&nbsp;                throw new FileNotFoundException(&quot;Cannot locate resource [$uri]&quot;)</b>
+<i>245</i>&nbsp;            }
+<i>246</i>&nbsp;
+<b class="nc"><i>247</i>&nbsp;            this.contentType = grailsResourceProcessor.getMimeType(uriWithoutFragment)</b>
+<b class="nc"><i>248</i>&nbsp;            if (log.debugEnabled) {</b>
+<b class="nc"><i>249</i>&nbsp;                log.debug &quot;Resource [$uriWithoutFragment] ($origResourceURL) has content type [${this.contentType}]&quot;</b>
+<i>250</i>&nbsp;            }
+<i>251</i>&nbsp;
+<b class="nc"><i>252</i>&nbsp;            setOriginalResource(new UrlResource(origResourceURL))</b>
+<i>253</i>&nbsp;
+<b class="nc"><i>254</i>&nbsp;            if (grailsResourceProcessor.processingEnabled) {</b>
+<b class="nc"><i>255</i>&nbsp;                setActualUrl(uriWithoutFragment)</b>
+<i>256</i>&nbsp;
+<b class="nc"><i>257</i>&nbsp;                setProcessedFile(grailsResourceProcessor.makeFileForURI(uriWithoutFragment))</b>
+<i>258</i>&nbsp;                // copy the file ready for mutation
+<b class="nc"><i>259</i>&nbsp;                this.copyOriginalResourceToWorkArea()</b>
+<i>260</i>&nbsp;            } else {
+<b class="nc"><i>261</i>&nbsp;                setActualUrl(uriWithoutFragment)</b>
+<i>262</i>&nbsp;            }
+<i>263</i>&nbsp;
+<i>264</i>&nbsp;        } else {
+<b class="nc"><i>265</i>&nbsp;            setOriginalResource(new UrlResource(this.sourceUrl))</b>
+<b class="nc"><i>266</i>&nbsp;            setActualUrl(this.sourceUrl)</b>
+<i>267</i>&nbsp;
+<b class="nc"><i>268</i>&nbsp;            log.warn &quot;Skipping mappers for ${this.actualUrl} because its an absolute URL.&quot;</b>
+<i>269</i>&nbsp;        }
+<i>270</i>&nbsp;    }
+<i>271</i>&nbsp;    
+<i>272</i>&nbsp;    // Hook for when preparation is done
+<i>273</i>&nbsp;    void endPrepare(grailsResourceProcessor) {
+<b class="nc"><i>274</i>&nbsp;        if (!delegating) {</b>
+<b class="nc"><i>275</i>&nbsp;            if (processedFile) {</b>
+<b class="nc"><i>276</i>&nbsp;                processedFile.setLastModified(originalLastMod ?: System.currentTimeMillis() )</b>
+<i>277</i>&nbsp;            }
+<i>278</i>&nbsp;        }
+<b class="nc"><i>279</i>&nbsp;        updateContentLength()</b>
+<b class="nc"><i>280</i>&nbsp;        updateExists()</b>
+<b class="nc"><i>281</i>&nbsp;        processed = true</b>
+<i>282</i>&nbsp;    }
+<i>283</i>&nbsp;    
+<i>284</i>&nbsp;    boolean isDelegating() {
+<b class="nc"><i>285</i>&nbsp;        delegate != null</b>
+<i>286</i>&nbsp;    }
+<i>287</i>&nbsp;    
+<i>288</i>&nbsp;    boolean exists() {
+<b class="nc"><i>289</i>&nbsp;        _resourceExists</b>
+<i>290</i>&nbsp;    }
+<i>291</i>&nbsp;    
+<i>292</i>&nbsp;    String getLinkUrl() {
+<b class="nc"><i>293</i>&nbsp;        if (!delegate) {</b>
+<b class="nc"><i>294</i>&nbsp;            return linkOverride ?: _linkUrl </b>
+<i>295</i>&nbsp;        } else {
+<b class="nc"><i>296</i>&nbsp;            return delegate.linkUrl</b>
+<i>297</i>&nbsp;        }
+<i>298</i>&nbsp;    }
+<i>299</i>&nbsp;    
+<i>300</i>&nbsp;    String getActualUrl() {
+<b class="nc"><i>301</i>&nbsp;        if (!delegate) {</b>
+<b class="nc"><i>302</i>&nbsp;            return this.@actualUrl </b>
+<i>303</i>&nbsp;        } else {
+<b class="nc"><i>304</i>&nbsp;            return delegate.actualUrl</b>
+<i>305</i>&nbsp;        }
+<i>306</i>&nbsp;    }
+<i>307</i>&nbsp;
+<i>308</i>&nbsp;    void setActualUrl(String url) {
+<b class="nc"><i>309</i>&nbsp;        this.@actualUrl = url</b>
+<b class="nc"><i>310</i>&nbsp;        _linkUrl = sourceUrlParamsAndFragment ? actualUrl + sourceUrlParamsAndFragment : url</b>
+<i>311</i>&nbsp;    }
+<i>312</i>&nbsp;    
+<i>313</i>&nbsp;    
+<i>314</i>&nbsp;    void setSourceUrl(String url) {
+<b class="nc"><i>315</i>&nbsp;        if (this.@originalUrl == null) {</b>
+<b class="nc"><i>316</i>&nbsp;            this.@originalUrl = url // the full monty</b>
+<i>317</i>&nbsp;        }
+<i>318</i>&nbsp;        
+<b class="nc"><i>319</i>&nbsp;        def qidx = url.indexOf(&#39;?&#39;)</b>
+<b class="nc"><i>320</i>&nbsp;        def hidx = url.indexOf(&#39;#&#39;)</b>
+<i>321</i>&nbsp;
+<b class="nc"><i>322</i>&nbsp;        def chopIdx = -1</b>
+<i>323</i>&nbsp;        // if there&#39;s hash we chop there, it comes before query
+<b class="nc"><i>324</i>&nbsp;        if (hidx &gt;= 0 &amp;&amp; qidx &lt; 0) {</b>
+<b class="nc"><i>325</i>&nbsp;            chopIdx = hidx</b>
+<i>326</i>&nbsp;        }
+<i>327</i>&nbsp;        // if query params, we chop there even if have hash. Hash is after query params
+<b class="nc"><i>328</i>&nbsp;        if (qidx &gt;= 0) {</b>
+<b class="nc"><i>329</i>&nbsp;            chopIdx = qidx</b>
+<i>330</i>&nbsp;        }
+<i>331</i>&nbsp;
+<b class="nc"><i>332</i>&nbsp;        sourceUrl = chopIdx &gt;= 0 ? url[0..chopIdx-1] : url</b>
+<i>333</i>&nbsp;
+<i>334</i>&nbsp;        // Strictly speaking this is query params plus fragment ...
+<b class="nc"><i>335</i>&nbsp;        sourceUrlParamsAndFragment = chopIdx &gt;= 0 ? url[chopIdx..-1] : null</b>
+<i>336</i>&nbsp;        
+<b class="nc"><i>337</i>&nbsp;        sourceUrlExtension = FilenameUtils.getExtension(sourceUrl) ?: null</b>
+<i>338</i>&nbsp;    }
+<i>339</i>&nbsp;
+<i>340</i>&nbsp;    /**
+<i>341</i>&nbsp;     * The file extension of the processedFile, or null if it has no extension.
+<i>342</i>&nbsp;     */
+<i>343</i>&nbsp;    String getProcessedFileExtension() {
+<b class="nc"><i>344</i>&nbsp;        if (processedFile) {</b>
+<b class="nc"><i>345</i>&nbsp;            FilenameUtils.getExtension(processedFile.name) ?: null</b>
+<i>346</i>&nbsp;        }
+<i>347</i>&nbsp;    }
+<i>348</i>&nbsp;    
+<i>349</i>&nbsp;    String getWorkDirRelativeParentPath() {
+<b class="nc"><i>350</i>&nbsp;        workDirRelativePath - &quot;$processedFile.name&quot;</b>
+<i>351</i>&nbsp;    }
+<i>352</i>&nbsp;    
+<i>353</i>&nbsp;    String getWorkDirRelativePath() {
+<b class="nc"><i>354</i>&nbsp;        if (processedFile) {</b>
+<b class="nc"><i>355</i>&nbsp;            return processedFile.path - workDir.path</b>
+<i>356</i>&nbsp;        } else {
+<b class="nc"><i>357</i>&nbsp;            return null</b>
+<i>358</i>&nbsp;        }
+<i>359</i>&nbsp;    }
+<i>360</i>&nbsp;    
+<i>361</i>&nbsp;    String getActualUrlParent() {
+<b class="nc"><i>362</i>&nbsp;        def lastSlash = actualUrl.lastIndexOf(&#39;/&#39;)</b>
+<b class="nc"><i>363</i>&nbsp;        if (lastSlash &gt;= 0) {</b>
+<b class="nc"><i>364</i>&nbsp;            return actualUrl[0..lastSlash-1]</b>
+<i>365</i>&nbsp;        } else {
+<b class="nc"><i>366</i>&nbsp;            return &#39;&#39;</b>
+<i>367</i>&nbsp;        }
+<i>368</i>&nbsp;    }
+<i>369</i>&nbsp;    
+<i>370</i>&nbsp;    String relativeToWithQueryParams(ResourceMeta base) {
+<b class="nc"><i>371</i>&nbsp;        def url = relativeTo(base)</b>
+<b class="nc"><i>372</i>&nbsp;        return sourceUrlParamsAndFragment ? url + sourceUrlParamsAndFragment : url</b>
+<i>373</i>&nbsp;    }
+<i>374</i>&nbsp;    
+<i>375</i>&nbsp;    ResourceMeta getDelegate() {
+<b class="nc"><i>376</i>&nbsp;        delegate</b>
+<i>377</i>&nbsp;    }
+<i>378</i>&nbsp;    
+<i>379</i>&nbsp;    /**
+<i>380</i>&nbsp;     * Reset the resource state to how it was after loading from the module definition
+<i>381</i>&nbsp;     * i.e. keep only declared info, nothing generated later during processing
+<i>382</i>&nbsp;     * // @todo should we delete the file in here?
+<i>383</i>&nbsp;     */
+<i>384</i>&nbsp;    void reset() {
+<b class="nc"><i>385</i>&nbsp;        this.@contentType = null</b>
+<b class="nc"><i>386</i>&nbsp;        this.@actualUrl = null</b>
+<b class="nc"><i>387</i>&nbsp;        this.@processedFile = null</b>
+<b class="nc"><i>388</i>&nbsp;        this.@originalResource = null</b>
+<b class="nc"><i>389</i>&nbsp;        this.@_resourceExists = false</b>
+<b class="nc"><i>390</i>&nbsp;        this.@originalContentLength = 0</b>
+<b class="nc"><i>391</i>&nbsp;        this.@_linkUrl = null</b>
+<b class="nc"><i>392</i>&nbsp;        this.@delegate = null</b>
+<b class="nc"><i>393</i>&nbsp;        this.@originalLastMod = 0</b>
+<b class="nc"><i>394</i>&nbsp;        this.@contentLength = 0</b>
+<b class="nc"><i>395</i>&nbsp;        this.@declaringResource = null</b>
+<b class="nc"><i>396</i>&nbsp;        this.@requestProcessors.clear()</b>
+<b class="nc"><i>397</i>&nbsp;        this.@processed = false</b>
+<b class="nc"><i>398</i>&nbsp;        attributes.entrySet().removeAll { it.key.startsWith(PROCESSED_BY_PREFIX) }</b>
+<i>399</i>&nbsp;    }
+<i>400</i>&nbsp;    
+<i>401</i>&nbsp;    /**
+<i>402</i>&nbsp;     * Calculate the URI of this resource relative to the base resource.
+<i>403</i>&nbsp;     * All resource URLs must be app-relative with no ../ or ./
+<i>404</i>&nbsp;     */
+<i>405</i>&nbsp;    String relativeTo(ResourceMeta base) {
+<b class="nc"><i>406</i>&nbsp;        if (actualAbsolute) {</b>
+<b class="nc"><i>407</i>&nbsp;            return actualUrl</b>
+<i>408</i>&nbsp;        }
+<b class="nc"><i>409</i>&nbsp;        def baseDirStr = base.actualUrlParent</b>
+<b class="nc"><i>410</i>&nbsp;        def thisDirStr = this.actualUrlParent</b>
+<b class="nc"><i>411</i>&nbsp;        boolean isChild = thisDirStr.startsWith(baseDirStr+&#39;/&#39;)</b>
+<b class="nc"><i>412</i>&nbsp;        if (isChild) {</b>
+<i>413</i>&nbsp;            // Truncate to the part that is after the base dir
+<b class="nc"><i>414</i>&nbsp;            return this.actualUrl[baseDirStr.size()+1..-1]</b>
+<i>415</i>&nbsp;        } else {
+<b class="nc"><i>416</i>&nbsp;            def result = new StringBuilder()</b>
+<i>417</i>&nbsp;
+<b class="nc"><i>418</i>&nbsp;            def commonStem = new StringBuilder()</b>
+<b class="nc"><i>419</i>&nbsp;            def baseUrl = base.actualUrl</b>
+<i>420</i>&nbsp;            // Eliminate the common portion - the base to which we need to &quot;..&quot;
+<b class="nc"><i>421</i>&nbsp;            def baseParts = baseUrl.tokenize(&#39;/&#39;)</b>
+<b class="nc"><i>422</i>&nbsp;            def thisParts = actualUrl.tokenize(&#39;/&#39;)</b>
+<b class="nc"><i>423</i>&nbsp;            int i = 0</b>
+<b class="nc"><i>424</i>&nbsp;            for (; i &lt; baseParts.size(); i++) { </b>
+<b class="nc"><i>425</i>&nbsp;                if (thisParts[i] == baseParts[i]) {</b>
+<b class="nc"><i>426</i>&nbsp;                    commonStem &lt;&lt; baseParts[i]+&#39;/&#39;</b>
+<i>427</i>&nbsp;                } else {
+<b class="nc"><i>428</i>&nbsp;                    break;</b>
+<i>429</i>&nbsp;                }
+<i>430</i>&nbsp;            }
+<b class="nc"><i>431</i>&nbsp;            if (baseParts.size()-1 &gt; i) {</b>
+<b class="nc"><i>432</i>&nbsp;                result &lt;&lt; &#39;../&#39; * (baseParts.size()-1 - i)</b>
+<i>433</i>&nbsp;            }
+<b class="nc"><i>434</i>&nbsp;            result &lt;&lt; actualUrl[commonStem.size()+1..-1]</b>
+<b class="nc"><i>435</i>&nbsp;            return result.toString()</b>
+<i>436</i>&nbsp;        }
+<i>437</i>&nbsp;    }
+<i>438</i>&nbsp;    
+<i>439</i>&nbsp;    void updateActualUrlFromProcessedFile() {
+<b class="nc"><i>440</i>&nbsp;        def p = workDirRelativePath?.replace(&#39;\\&#39;, &#39;/&#39;)</b>
+<b class="nc"><i>441</i>&nbsp;        if (p != null) {</b>
+<i>442</i>&nbsp;            // have to call the setter method
+<b class="nc"><i>443</i>&nbsp;            setActualUrl(p)</b>
+<i>444</i>&nbsp;        } else {
+<b class="nc"><i>445</i>&nbsp;            setActualUrl(sourceUrl)</b>
+<i>446</i>&nbsp;        }
+<i>447</i>&nbsp;    }
+<i>448</i>&nbsp;    
+<i>449</i>&nbsp;    boolean excludesMapperOrOperation(String mapperName, String operationName) {
+<b class="nc"><i>450</i>&nbsp;        if (!excludedMappers) {</b>
+<b class="nc"><i>451</i>&nbsp;            return false</b>
+<i>452</i>&nbsp;        }
+<i>453</i>&nbsp;        
+<b class="nc"><i>454</i>&nbsp;        def exclude = excludedMappers.contains(&quot;*&quot;)</b>
+<b class="nc"><i>455</i>&nbsp;        if (!exclude) {</b>
+<b class="nc"><i>456</i>&nbsp;            exclude = excludedMappers.contains(mapperName)</b>
+<i>457</i>&nbsp;        }
+<b class="nc"><i>458</i>&nbsp;        if (!exclude &amp;&amp; operationName) {</b>
+<b class="nc"><i>459</i>&nbsp;            exclude = excludedMappers.contains(operationName)</b>
+<i>460</i>&nbsp;        }
+<b class="nc"><i>461</i>&nbsp;        return exclude</b>
+<i>462</i>&nbsp;    }
+<i>463</i>&nbsp;    
+<i>464</i>&nbsp;    void wasProcessedByMapper(ResourceMapper mapper, boolean processed = true) {
+<b class="nc"><i>465</i>&nbsp;        attributes[PROCESSED_BY_PREFIX+mapper.name] = processed</b>
+<i>466</i>&nbsp;    }
+<i>467</i>&nbsp;    
+<i>468</i>&nbsp;    String toString() {
+<b class="nc"><i>469</i>&nbsp;        &quot;ResourceMeta for URI ${sourceUrl} served by ${actualUrl} (delegate: ${delegating ? delegate : &#39;none&#39;})&quot;</b>
+<i>470</i>&nbsp;    }
+<i>471</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

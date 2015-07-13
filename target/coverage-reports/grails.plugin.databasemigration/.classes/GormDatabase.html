@@ -1,0 +1,154 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GormDatabase</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">grails.plugin.databasemigration</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GormDatabase (grails.plugin.databasemigration)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GormDatabase</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* Copyright 2010-2013 SpringSource.
+<i>2</i>&nbsp; *
+<i>3</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;)
+<i>4</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>5</i>&nbsp; * You may obtain a copy of the License at
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>10</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>11</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>12</i>&nbsp; * See the License for the specific language governing permissions and
+<i>13</i>&nbsp; * limitations under the License.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;package grails.plugin.databasemigration
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import liquibase.database.AbstractDatabase
+<i>18</i>&nbsp;import liquibase.database.DatabaseConnection
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * Used by the gorm-diff script. Doesn&#39;t do much - it&#39;s mostly a holder for the configuration.
+<i>22</i>&nbsp; *
+<i>23</i>&nbsp; * @author &lt;a href=&#39;mailto:burt@burtbeckwith.com&#39;&gt;Burt Beckwith&lt;/a&gt;
+<i>24</i>&nbsp; */
+<i>25</i>&nbsp;class GormDatabase extends AbstractDatabase {
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;	/*org.hibernate.cfg.Configuration*/ def configuration
+<i>28</i>&nbsp;	/*org.hibernate.dialect.Dialect*/ def dialect
+<i>29</i>&nbsp;	String schema
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;	GormDatabase(/*org.hibernate.cfg.Configuration*/ configuration, String schema = null) {
+<b class="nc"><i>32</i>&nbsp;		this.configuration = configuration</b>
+<b class="nc"><i>33</i>&nbsp;		this.schema = schema</b>
+<i>34</i>&nbsp;
+<b class="nc"><i>35</i>&nbsp;		dialect = MigrationUtils.createInstance(configuration.getProperty(&#39;hibernate.dialect&#39;))</b>
+<i>36</i>&nbsp;	}
+<i>37</i>&nbsp;
+<b class="nc"><i>38</i>&nbsp;	String getDatabaseProductName() { &#39;GORM Mapping&#39; }</b>
+<i>39</i>&nbsp;
+<b class="nc"><i>40</i>&nbsp;	String getTypeName() { &#39;GORM&#39; }</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;	// unused interface methods
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;	void setConnection(DatabaseConnection conn) {
+<b class="nc"><i>45</i>&nbsp;		throw new UnsupportedOperationException()</b>
+<i>46</i>&nbsp;	}
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;	boolean isCorrectDatabaseImplementation(DatabaseConnection conn) {
+<b class="nc"><i>49</i>&nbsp;		throw new UnsupportedOperationException()</b>
+<i>50</i>&nbsp;	}
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;	String getDefaultDriver(String url) {
+<b class="nc"><i>53</i>&nbsp;		throw new UnsupportedOperationException()</b>
+<i>54</i>&nbsp;	}
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;	boolean supportsInitiallyDeferrableColumns() {
+<b class="nc"><i>57</i>&nbsp;		throw new UnsupportedOperationException()</b>
+<i>58</i>&nbsp;	}
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;	String getCurrentDateTimeFunction() {
+<b class="nc"><i>61</i>&nbsp;		throw new UnsupportedOperationException()</b>
+<i>62</i>&nbsp;	}
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;	boolean supportsTablespaces() {
+<b class="nc"><i>65</i>&nbsp;		throw new UnsupportedOperationException()</b>
+<i>66</i>&nbsp;	}
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;	int getPriority() {
+<b class="nc"><i>69</i>&nbsp;		throw new UnsupportedOperationException()</b>
+<i>70</i>&nbsp;	}
+<i>71</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

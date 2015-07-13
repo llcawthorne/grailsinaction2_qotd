@@ -1,0 +1,277 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MigrationRunner</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">grails.plugin.databasemigration</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MigrationRunner (grails.plugin.databasemigration)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MigrationRunner</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 30)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">MigrationRunner$_autoRun_closure1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 12)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">MigrationRunner$_autoRun_closure1_closure3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">MigrationRunner$_runMigrations_closure2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 47)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* Copyright 2010-2013 SpringSource.
+<i>2</i>&nbsp; *
+<i>3</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<i>4</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>5</i>&nbsp; * You may obtain a copy of the License at
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>10</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>11</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>12</i>&nbsp; * See the License for the specific language governing permissions and
+<i>13</i>&nbsp; * limitations under the License.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;package grails.plugin.databasemigration
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import grails.util.GrailsUtil
+<i>18</i>&nbsp;import java.sql.ResultSet
+<i>19</i>&nbsp;import liquibase.Liquibase
+<i>20</i>&nbsp;import liquibase.database.Database
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;import org.slf4j.Logger
+<i>23</i>&nbsp;import org.slf4j.LoggerFactory
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;/**
+<i>26</i>&nbsp; * Based on the class of the same name from Mike Hugo&#39;s liquibase-runner plugin.
+<i>27</i>&nbsp; *
+<i>28</i>&nbsp; * @author Mike Hugo
+<i>29</i>&nbsp; * @author &lt;a href=&#39;mailto:burt@burtbeckwith.com&#39;&gt;Burt Beckwith&lt;/a&gt;
+<i>30</i>&nbsp; */
+<i>31</i>&nbsp;class MigrationRunner {
+<i>32</i>&nbsp;
+<b class="nc"><i>33</i>&nbsp;	protected static Logger LOG = LoggerFactory.getLogger(this)</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;	static void autoRun(migrationCallbacks = null) {
+<b class="nc"><i>36</i>&nbsp;		def dataSourceConfigs = grails.plugin.databasemigration.MigrationUtils.getDataSourceConfigs()</b>
+<b class="nc"><i>37</i>&nbsp;		dataSourceConfigs.dataSource = MigrationUtils.application.config.dataSource</b>
+<i>38</i>&nbsp;		
+<b class="nc"><i>39</i>&nbsp;		for (configAndName in dataSourceConfigs) {</b>
+<b class="nc"><i>40</i>&nbsp;			String dsConfigName = configAndName.key</b>
+<b class="nc"><i>41</i>&nbsp;			ConfigObject configObject = configAndName.value</b>
+<i>42</i>&nbsp;			
+<b class="nc"><i>43</i>&nbsp;			if (!MigrationUtils.canAutoMigrate(dsConfigName)) {</b>
+<b class="nc"><i>44</i>&nbsp;				LOG.warn &quot;Not running auto migrate for DataSource &#39;$dsConfigName&#39;&quot;</b>
+<b class="nc"><i>45</i>&nbsp;				continue</b>
+<i>46</i>&nbsp;			}
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;			def config = MigrationUtils.getConfig(dsConfigName)</b>
+<i>49</i>&nbsp;
+<b class="nc"><i>50</i>&nbsp;			if (!config.updateOnStart) {</b>
+<b class="nc"><i>51</i>&nbsp;				LOG.info &quot;updateOnStart disabled for $dsConfigName; not running migrations&quot;</b>
+<b class="nc"><i>52</i>&nbsp;				continue</b>
+<i>53</i>&nbsp;			}
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;			try {
+<b class="nc"><i>56</i>&nbsp;				MigrationUtils.executeInSession(dsConfigName) {</b>
+<b class="nc"><i>57</i>&nbsp;					Database database</b>
+<b class="nc"><i>58</i>&nbsp;					if(config.multiSchema){</b>
+<b class="nc"><i>59</i>&nbsp;						database = MigrationUtils.getDatabase(null, dsConfigName)</b>
+<b class="nc"><i>60</i>&nbsp;						ResultSet resultSet = database.connection.metaData.schemas</b>
+<b class="nc"><i>61</i>&nbsp;						List schemas = []</b>
+<b class="nc"><i>62</i>&nbsp;						while (resultSet.next()) {</b>
+<b class="nc"><i>63</i>&nbsp;							String schema = resultSet.getString(1)</b>
+<b class="nc"><i>64</i>&nbsp;							if(schema ==~ config.multiSchemaPattern || schema in config.multiSchemaList){ schemas &lt;&lt; schema } </b>
+<i>65</i>&nbsp;						}
+<i>66</i>&nbsp;						
+<b class="nc"><i>67</i>&nbsp;						LOG.info &quot;Found ${schemas.size()} schemas to update&quot;</b>
+<i>68</i>&nbsp;						
+<b class="nc"><i>69</i>&nbsp;						schemas.each{ schema -&gt;</b>
+<b class="nc"><i>70</i>&nbsp;							database = MigrationUtils.getDatabase(schema, dsConfigName)</b>
+<b class="nc"><i>71</i>&nbsp;							runMigrations(dsConfigName, schema, config, database, migrationCallbacks)</b>
+<i>72</i>&nbsp;						}
+<i>73</i>&nbsp;					}
+<i>74</i>&nbsp;					else{
+<b class="nc"><i>75</i>&nbsp;						database = MigrationUtils.getDatabase(config.updateOnStartDefaultSchema ?: null, dsConfigName)</b>
+<b class="nc"><i>76</i>&nbsp;						runMigrations(dsConfigName, config.updateOnStartDefaultSchema ?: null, config, database, migrationCallbacks)</b>
+<i>77</i>&nbsp;					}
+<i>78</i>&nbsp;				}
+<i>79</i>&nbsp;			}
+<i>80</i>&nbsp;			catch (e) {
+<b class="nc"><i>81</i>&nbsp;				GrailsUtil.deepSanitize e</b>
+<b class="nc"><i>82</i>&nbsp;				throw e</b>
+<i>83</i>&nbsp;			}
+<i>84</i>&nbsp;		}
+<i>85</i>&nbsp;	}
+<i>86</i>&nbsp;	
+<i>87</i>&nbsp;	static void runMigrations(dsConfigName, schema, config, database, migrationCallbacks){
+<b class="nc"><i>88</i>&nbsp;		if (config.dropOnStart) {</b>
+<b class="nc"><i>89</i>&nbsp;			LOG.warn &quot;Dropping tables...&quot;</b>
+<b class="nc"><i>90</i>&nbsp;			MigrationUtils.getLiquibase(database).dropAll()</b>
+<i>91</i>&nbsp;		}
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;		Map&lt;String, Liquibase&gt; liquibases = [:]</b>
+<b class="nc"><i>94</i>&nbsp;		for (String changelogName in config.updateOnStartFileNames) {</b>
+<b class="nc"><i>95</i>&nbsp;			Liquibase liquibase = MigrationUtils.getLiquibase(database, changelogName)</b>
+<b class="nc"><i>96</i>&nbsp;			if (liquibase.listUnrunChangeSets(config.updateOnStartContexts ?: config.contexts ?: null)) {</b>
+<b class="nc"><i>97</i>&nbsp;				liquibases[changelogName] = liquibase</b>
+<i>98</i>&nbsp;			}
+<i>99</i>&nbsp;		}
+<i>100</i>&nbsp;
+<b class="nc"><i>101</i>&nbsp;		if (liquibases) {</b>
+<b class="nc"><i>102</i>&nbsp;			LOG.info &quot;Migrations detected for &#39;$dsConfigName${schema ? &#39;.&#39;+schema : &#39;&#39;}&#39;: ${liquibases.keySet()}&quot;</b>
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;			try {
+<b class="nc"><i>105</i>&nbsp;				migrationCallbacks?.beforeStartMigration database</b>
+<i>106</i>&nbsp;			}
+<i>107</i>&nbsp;			catch (MissingMethodException ignored) {}
+<i>108</i>&nbsp;
+<b class="nc"><i>109</i>&nbsp;			liquibases.each { String changelogName, Liquibase liquibase -&gt;</b>
+<b class="nc"><i>110</i>&nbsp;				LOG.info &quot;Running script &#39;$changelogName&#39;&quot;</b>
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;				try {
+<b class="nc"><i>113</i>&nbsp;					migrationCallbacks?.onStartMigration database, liquibase, changelogName</b>
+<i>114</i>&nbsp;				}
+<i>115</i>&nbsp;				catch (MissingMethodException ignored) {}
+<i>116</i>&nbsp;
+<b class="nc"><i>117</i>&nbsp;				liquibase.update config.updateOnStartContexts ?: config.contexts ?: null</b>
+<i>118</i>&nbsp;			}
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;			try {
+<b class="nc"><i>121</i>&nbsp;				migrationCallbacks?.afterMigrations database</b>
+<i>122</i>&nbsp;			}
+<i>123</i>&nbsp;			catch (MissingMethodException ignored) {}
+<i>124</i>&nbsp;		}
+<i>125</i>&nbsp;		else {
+<b class="nc"><i>126</i>&nbsp;			LOG.info &quot;No migrations to run for &#39;$dsConfigName${schema ? &#39;.&#39;+schema : &#39;&#39;}&#39;&quot;</b>
+<i>127</i>&nbsp;		}
+<i>128</i>&nbsp;	}
+<i>129</i>&nbsp;	
+<i>130</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>

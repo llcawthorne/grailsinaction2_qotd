@@ -1,0 +1,231 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChangelogXml2Groovy</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">grails.plugin.databasemigration</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChangelogXml2Groovy (grails.plugin.databasemigration)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChangelogXml2Groovy</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 38)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ChangelogXml2Groovy$_appendAttrs_closure1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ChangelogXml2Groovy$_appendWithIndent_closure2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 43)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* Copyright 2010-2013 SpringSource.
+<i>2</i>&nbsp; *
+<i>3</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<i>4</i>&nbsp; * you may not use this file except in compliance with the License.
+<i>5</i>&nbsp; * You may obtain a copy of the License at
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>10</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>11</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>12</i>&nbsp; * See the License for the specific language governing permissions and
+<i>13</i>&nbsp; * limitations under the License.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;package grails.plugin.databasemigration
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;/**
+<i>18</i>&nbsp; * Generates a Groovy DSL version of a Liquibase XML changelog.
+<i>19</i>&nbsp; *
+<i>20</i>&nbsp; * @author &lt;a href=&#39;mailto:burt@burtbeckwith.com&#39;&gt;Burt Beckwith&lt;/a&gt;
+<i>21</i>&nbsp; */
+<i>22</i>&nbsp;class ChangelogXml2Groovy {
+<i>23</i>&nbsp;
+<b class="nc"><i>24</i>&nbsp;	protected static final String NEWLINE = System.getProperty(&#39;line.separator&#39;)</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;	/**
+<i>27</i>&nbsp;	 * Convert a Liquibase XML changelog to Groovy DSL format.
+<i>28</i>&nbsp;	 * @param xml the XML
+<i>29</i>&nbsp;	 * @return DSL format
+<i>30</i>&nbsp;	 */
+<i>31</i>&nbsp;	static String convert(String xml) {
+<b class="nc"><i>32</i>&nbsp;		def groovy = new StringBuilder(&#39;databaseChangeLog = {&#39;)</b>
+<b class="nc"><i>33</i>&nbsp;		groovy.append NEWLINE</b>
+<b class="nc"><i>34</i>&nbsp;		for (node in new XmlParser(false, false).parseText(xml)) {</b>
+<b class="nc"><i>35</i>&nbsp;			convertNode node, groovy, 1</b>
+<i>36</i>&nbsp;		}
+<b class="nc"><i>37</i>&nbsp;		groovy.append &#39;}&#39;</b>
+<b class="nc"><i>38</i>&nbsp;		groovy.append NEWLINE</b>
+<b class="nc"><i>39</i>&nbsp;		groovy.toString()</b>
+<i>40</i>&nbsp;	}
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;	protected static void convertNode(Node node, StringBuilder groovy, int indentLevel) {
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;		groovy.append NEWLINE</b>
+<b class="nc"><i>45</i>&nbsp;		appendWithIndent indentLevel, groovy, node.name()</b>
+<i>46</i>&nbsp;
+<b class="nc"><i>47</i>&nbsp;		String mixedText</b>
+<b class="nc"><i>48</i>&nbsp;		def children = []</b>
+<b class="nc"><i>49</i>&nbsp;		for (child in node.children()) {</b>
+<b class="nc"><i>50</i>&nbsp;			if (child instanceof String) {</b>
+<b class="nc"><i>51</i>&nbsp;				mixedText = child</b>
+<i>52</i>&nbsp;			}
+<i>53</i>&nbsp;			else {
+<b class="nc"><i>54</i>&nbsp;				children &lt;&lt; child</b>
+<i>55</i>&nbsp;			}
+<i>56</i>&nbsp;		}
+<i>57</i>&nbsp;
+<b class="nc"><i>58</i>&nbsp;		appendAttrs groovy, node, mixedText</b>
+<i>59</i>&nbsp;
+<b class="nc"><i>60</i>&nbsp;		if (children) {</b>
+<b class="nc"><i>61</i>&nbsp;			groovy.append &#39; {&#39;</b>
+<b class="nc"><i>62</i>&nbsp;			for (child in children) {</b>
+<b class="nc"><i>63</i>&nbsp;				convertNode child, groovy, indentLevel + 1</b>
+<i>64</i>&nbsp;			}
+<b class="nc"><i>65</i>&nbsp;			appendWithIndent indentLevel, groovy, &#39;}&#39;</b>
+<b class="nc"><i>66</i>&nbsp;			groovy.append NEWLINE</b>
+<i>67</i>&nbsp;		}
+<i>68</i>&nbsp;		else {
+<b class="nc"><i>69</i>&nbsp;			groovy.append NEWLINE</b>
+<i>70</i>&nbsp;		}
+<i>71</i>&nbsp;	}
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;	protected static void appendAttrs(StringBuilder groovy, Node node, String text) {
+<b class="nc"><i>74</i>&nbsp;		def local = new StringBuilder()</b>
+<i>75</i>&nbsp;
+<b class="nc"><i>76</i>&nbsp;		String delimiter = &#39;&#39;</b>
+<i>77</i>&nbsp;
+<b class="nc"><i>78</i>&nbsp;		if (text) {</b>
+<b class="nc"><i>79</i>&nbsp;			local.append &#39;&quot;&quot;&quot;&#39;</b>
+<b class="nc"><i>80</i>&nbsp;			local.append text.replaceAll(/(\$|\\)/, /\\$1/)</b>
+<b class="nc"><i>81</i>&nbsp;			local.append &#39;&quot;&quot;&quot;&#39;</b>
+<b class="nc"><i>82</i>&nbsp;			delimiter = &#39;, &#39;</b>
+<i>83</i>&nbsp;		}
+<i>84</i>&nbsp;
+<b class="nc"><i>85</i>&nbsp;		node.attributes().each { name, value -&gt;</b>
+<b class="nc"><i>86</i>&nbsp;			local.append delimiter</b>
+<b class="nc"><i>87</i>&nbsp;			local.append name</b>
+<b class="nc"><i>88</i>&nbsp;			local.append(&#39;: &quot;&#39;).append(value.replaceAll(/(\$|\\|\\n)/, /\\$1/)).append(&#39;&quot;&#39;)</b>
+<b class="nc"><i>89</i>&nbsp;			delimiter = &#39;, &#39;</b>
+<i>90</i>&nbsp;		}
+<i>91</i>&nbsp;
+<b class="nc"><i>92</i>&nbsp;		if (local.length()) {</b>
+<b class="nc"><i>93</i>&nbsp;			groovy.append &#39;(&#39;</b>
+<b class="nc"><i>94</i>&nbsp;			groovy.append local.toString()</b>
+<b class="nc"><i>95</i>&nbsp;			groovy.append &#39;)&#39;</b>
+<i>96</i>&nbsp;		}
+<i>97</i>&nbsp;	}
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;	protected static void appendWithIndent(int indentLevel, StringBuilder groovy, String s) {
+<b class="nc"><i>100</i>&nbsp;		indentLevel.times { groovy.append &#39;\t&#39; }</b>
+<b class="nc"><i>101</i>&nbsp;		groovy.append s</b>
+<i>102</i>&nbsp;	}
+<i>103</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2015-07-12 14:09</div>
+</div>
+</body>
+</html>
